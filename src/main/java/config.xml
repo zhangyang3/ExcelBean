@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<excels xmlns="http://www.iflytek.com/schema/excel" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.iflytek.com/schema/excel 
+		http://www.iflytek.com/schema/excel.xsd">
+	
+	<excel name="default" class="com.iflytek.sgy.excel.test.xmlbean.ExcelBean">
+		<sheet name="实施清单要素" order="1" type="VERTICAL" fieldName="ssqdBasic">
+			<cell startX="c" endX="d" startY="4" endY="4" fieldName="basicCode"/>
+			<cell startX="c" endX="d" startY="5" endY="5" fieldName="ssbm" mappingProcessor="com.iflytek.sgy.excel.test.bean.processor.mapping.SxlxMappingProcess"/>
+			<cell startX="c" endX="d" startY="6" endY="6" fieldName="sxmc">
+				<validators>
+					<validator type="com.iflytek.sgy.excel.validator.NotBlankValidator"/>
+					<validator type="com.iflytek.sgy.excel.validator.RegularValidator" param="^11$"/>
+				</validators>
+			</cell>
+			<cell startX="d" endX="d" startY="7" endY="7" fieldName="sxlx"/>
+			<cell startX="c" endX="d" startY="9" endY="9" fieldName="xscj" mappingProcessor="com.iflytek.sgy.excel.test.bean.processor.mapping.XscjMappingProcessor"/>
+		</sheet>
+		<sheet name="附表1特别程序要素" order="2" type="HORIZONTAL" startLine="3" fieldName="specialList">
+			<cell startX="a" endX="a" fieldName="no"/>
+			<cell startX="b" endX="b" fieldName="type">
+				<validators>
+					<validator type="com.iflytek.sgy.excel.validator.RegularValidator" param="^A$"/>
+				</validators>
+			</cell>
+			<cell startX="c" endX="c" fieldName="name" mappingProcessor="com.iflytek.sgy.excel.test.bean.processor.mapping.SxlxMappingProcess"/>
+			<cell startX="d" endX="d" fieldName="timeLimit"/>
+			<cell startX="e" endX="e" fieldName="according"/>
+		</sheet>
+	</excel>
+</excels>
