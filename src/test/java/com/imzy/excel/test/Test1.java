@@ -17,7 +17,7 @@ public class Test1 {
 
 	private static void xmlconfig() {
 		Object parse = ExcelImporter.getInstance().write("D:\\附件4政务服务事项实施清单要素梳理表(1).xlsx",
-				"C:\\Users\\zy\\workspace\\ztfw\\FlyExcel\\src\\main\\java\\config.xml");
+				Test1.class.getResource("config.xml").getPath());
 		System.out.println(JSONObject.toJSONString(parse));
 
 	}
