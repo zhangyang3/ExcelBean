@@ -4,6 +4,7 @@ import com.imzy.excel.annotations.Cell;
 import com.imzy.excel.annotations.Validator;
 import com.imzy.excel.test.bean.processor.mapping.SxlxMappingProcess;
 import com.imzy.excel.test.bean.processor.mapping.XscjMappingProcessor;
+import com.imzy.excel.test.bean.processor.position.SqcldjXmPositionProcessor;
 import com.imzy.excel.validator.NotBlankValidator;
 import com.imzy.excel.validator.RegularValidator;
 
@@ -28,4 +29,6 @@ public class SsqdBasic {
 	private String sxlx;
 	@Cell(startX = 'c', endX = 'd', startY = 9, endY = 9, mappingProcessor = XscjMappingProcessor.class)
 	private String xscj;
+	@Cell(positionProcessor = SqcldjXmPositionProcessor.class)
+	private String xm;
 }

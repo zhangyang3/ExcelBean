@@ -99,7 +99,7 @@ public class AnnotationConfigParser {
 		cellConfigBean.setEndY(cellAnnotation.endY());
 		cellConfigBean.setStartX(cellAnnotation.startX());
 		cellConfigBean.setStartY(cellAnnotation.startY());
-		cellConfigBean.setPositionProcesser(cellAnnotation.positionProcesser());
+		cellConfigBean.setPositionProcessor(cellAnnotation.positionProcessor());
 		cellConfigBean.setFieldName(cellField.getName());
 		cellConfigBean.setMappingProcessor(cellAnnotation.mappingProcessor());
 		cellConfigBean.setName(cellAnnotation.name());

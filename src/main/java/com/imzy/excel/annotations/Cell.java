@@ -52,6 +52,6 @@ public @interface Cell {
 	 * 坐标处理器
 	 * 默认值：PositionProcessor.class {@link com.imzy.excel.processer.PositionProcessor}
 	 */
-	Class<? extends PositionProcessor> positionProcesser() default PositionProcessor.class;
+	Class<? extends PositionProcessor> positionProcessor() default PositionProcessor.class;
 
 }

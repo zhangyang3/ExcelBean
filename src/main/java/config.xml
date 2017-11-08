@@ -15,6 +15,7 @@
 			</cell>
 			<cell startX="d" endX="d" startY="7" endY="7" fieldName="sxlx"/>
 			<cell startX="c" endX="d" startY="9" endY="9" fieldName="xscj" mappingProcessor="com.imzy.excel.test.bean.processor.mapping.XscjMappingProcessor"/>
+			<cell fieldName="xm" positionProcessor="com.imzy.excel.test.bean.processor.position.SqcldjXmPositionProcessor" />
 		</sheet>
 		<sheet name="附表1特别程序要素" order="2" type="HORIZONTAL" startLine="3" fieldName="specialList">
 			<cell startX="a" endX="a" fieldName="no"/>

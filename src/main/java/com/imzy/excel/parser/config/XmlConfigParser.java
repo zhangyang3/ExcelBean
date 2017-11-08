@@ -137,12 +137,16 @@ public class XmlConfigParser {
 				String startY = element.attributeValue("startY");
 				String endY = element.attributeValue("endY");
 				String mappingProcessor = element.attributeValue("mappingProcessor");
-				String positionProcesser = element.attributeValue("positionProcesser");
+				String positionProcessor = element.attributeValue("positionProcessor");
 				CellConfigBean cellConfigBean = new CellConfigBean();
 				cellConfigBean.setName(name);
 				cellConfigBean.setFieldName(fieldName);
-				cellConfigBean.setStartX(startX.charAt(0));
-				cellConfigBean.setEndX(endX.charAt(0));
+				if (StringUtils.isNotBlank(startX)) {
+					cellConfigBean.setStartX(startX.charAt(0));
+				}
+				if (StringUtils.isNotBlank(endX)) {
+					cellConfigBean.setEndX(endX.charAt(0));
+				}
 				if (StringUtils.isNotBlank(startY)) {
 					cellConfigBean.setStartY(Integer.parseInt(startY.trim()));
 				}
@@ -155,9 +159,9 @@ public class XmlConfigParser {
 				} else {
 					cellConfigBean.setMappingProcessor(SingleStringMappingProcessor.class);
 				}
-				if (StringUtils.isNotBlank(positionProcesser)) {
-					cellConfigBean.setPositionProcesser(
-							(Class<? extends PositionProcessor>) Class.forName(positionProcesser.trim()));
+				if (StringUtils.isNotBlank(positionProcessor)) {
+					cellConfigBean.setPositionProcessor(
+							(Class<? extends PositionProcessor>) Class.forName(positionProcessor.trim()));
 				}
 
 				List<ValidatorConfigBean> validatorBeanConfigList = parseCellNode(element.element("validators"));

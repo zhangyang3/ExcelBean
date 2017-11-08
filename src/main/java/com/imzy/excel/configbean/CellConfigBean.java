@@ -29,7 +29,7 @@ public class CellConfigBean {
 
 	Class<? extends MappingProcessor> mappingProcessor;
 
-	Class<? extends PositionProcessor> positionProcesser;
+	Class<? extends PositionProcessor> positionProcessor;
 
 	List<ValidatorConfigBean> validatorBeanConfigList;
 }

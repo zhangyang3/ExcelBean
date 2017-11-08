@@ -15,4 +15,6 @@ public class SsqdBasic {
 	private String sxmc;
 	private String sxlx;
 	private String xscj;
+	private String xm;
+
 }

@@ -55,13 +55,13 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param cellConfigBean
 	 * @return
 	 */
-	private char getEndX(CellConfigBean cellConfigBean) {
-		char endX = cellConfigBean.getEndX();
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+	private Character getEndX(CellConfigBean cellConfigBean) {
+		Character endX = cellConfigBean.getEndX();
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
 		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
 			try {
 				PositionProcessor newInstance = positionProcesser.newInstance();
-				endX = newInstance.getEndX();
+				endX = newInstance.getEndX(ThreadLocalHelper.getCurrentSheet());
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -77,14 +77,15 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param cellConfigBean
 	 * @return
 	 */
-	private char getStartX(CellConfigBean cellConfigBean) {
-		char startX = cellConfigBean.getStartX();
+	private Character getStartX(CellConfigBean cellConfigBean) {
+		Character startX = cellConfigBean.getStartX();
 
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
 		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
 			try {
 				PositionProcessor newInstance = positionProcesser.newInstance();
-				startX = newInstance.getStartX();
+
+				startX = newInstance.getStartX(ThreadLocalHelper.getCurrentSheet());
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -100,14 +101,14 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param cellConfigBean
 	 * @return
 	 */
-	private int getStartY(CellConfigBean cellConfigBean) {
-		int startY = cellConfigBean.getStartY();
+	private Integer getStartY(CellConfigBean cellConfigBean) {
+		Integer startY = cellConfigBean.getStartY();
 
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
 		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
 			try {
 				PositionProcessor newInstance = positionProcesser.newInstance();
-				startY = newInstance.getStartY();
+				startY = newInstance.getStartY(ThreadLocalHelper.getCurrentSheet());
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -123,14 +124,14 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param cellConfigBean
 	 * @return
 	 */
-	private int getEndY(CellConfigBean cellConfigBean) {
-		int endY = cellConfigBean.getEndY();
+	private Integer getEndY(CellConfigBean cellConfigBean) {
+		Integer endY = cellConfigBean.getEndY();
 
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
 		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
 			try {
 				PositionProcessor newInstance = positionProcesser.newInstance();
-				endY = newInstance.getEndY();
+				endY = newInstance.getEndY(ThreadLocalHelper.getCurrentSheet());
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -146,9 +147,9 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	}
 
 	protected Point getPoint(CellConfigBean cellConfigBean, Integer y) {
-		char startX = getStartX(cellConfigBean);
-		char endX = getEndX(cellConfigBean);
-		int startY = -1, endY = -1;
+		Character startX = getStartX(cellConfigBean);
+		Character endX = getEndX(cellConfigBean);
+		Integer startY = -1, endY = -1;
 		if (null == y) {
 			startY = getStartY(cellConfigBean);
 			endY = getEndY(cellConfigBean);
