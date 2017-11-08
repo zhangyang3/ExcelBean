@@ -3,6 +3,7 @@ package com.imzy.excel.configbean;
 import java.util.List;
 
 import com.imzy.excel.enums.SheetType;
+import com.imzy.excel.processer.ExistProcessor;
 
 import lombok.Data;
 
@@ -20,9 +21,9 @@ public class SheetConfigBean {
 
 	SheetType type;
 
-	Integer order;
-
 	Integer startLine;
+
+	Class<? extends ExistProcessor> existProcessor;
 
 	List<CellConfigBean> cellConfigBeanList;
 

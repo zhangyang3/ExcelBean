@@ -8,14 +8,20 @@ import org.apache.poi.ss.usermodel.Sheet;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.util.SheetUtils;
 
-public class SqcldjXmPositionProcessor implements PositionProcessor {
+/**
+ * 
+ * @author yangzhang7
+ *
+ */
+public class SsqdBasic47PositionProcessor implements PositionProcessor {
+
 	private Cell positionCell;
 
 	private Cell getCell(Sheet sheet) {
 		if (positionCell == null) {
 			for (Row row : sheet) {
 				Cell cell = row.getCell(0);
-				if (StringUtils.equals(SheetUtils.getCellValue(cell), "姓名")) {
+				if (StringUtils.equals(SheetUtils.getCellValue(cell), "47.0")) {
 					positionCell = cell;
 					break;
 				}
@@ -37,7 +43,10 @@ public class SqcldjXmPositionProcessor implements PositionProcessor {
 	@Override
 	public Integer getStartY(Sheet sheet) {
 		Cell cell = getCell(sheet);
-		return cell.getRowIndex() + 1;
+		if (null != cell) {
+			return cell.getRowIndex() + 1;
+		}
+		return null;
 	}
 
 	@Override

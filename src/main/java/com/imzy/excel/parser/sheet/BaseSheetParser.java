@@ -1,16 +1,24 @@
 package com.imzy.excel.parser.sheet;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.imzy.excel.configbean.CellConfigBean;
+import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
+import com.imzy.excel.exceptions.ExcelException;
+import com.imzy.excel.exceptions.ExitHorizontalExcelException;
 import com.imzy.excel.exceptions.ValidateExcelException;
 import com.imzy.excel.parser.sheet.task.CommonTask;
+import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
+import com.imzy.excel.processer.mapping.MappingProcessorFactory;
 import com.imzy.excel.support.ThreadLocalHelper;
+import com.imzy.excel.util.BeanUtils;
 import com.imzy.excel.util.SheetUtils;
 import com.imzy.excel.validator.Validatable;
 import com.imzy.excel.validator.ValidatableFactory;
@@ -21,6 +29,60 @@ import com.imzy.excel.validator.ValidatableFactory;
  *
  */
 public abstract class BaseSheetParser implements SheetParser, CommonTask {
+
+	/**
+	 * 构建bean
+	 * @param clazz 待构建bean的类型
+	 * @param cellConfigBeanList 待构建bean中的cell配置列表
+	 * @param sheetConfigBean 带构建bean的sheet配置
+	 * @return
+	 */
+	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> cellConfigBeanList,
+			SheetConfigBean sheetConfigBean) {
+
+		// 反射一个bean
+		T newInstance = null;
+		try {
+			newInstance = clazz.newInstance();
+		} catch (Exception e) {
+			throw new ExcelException(e.getMessage(), e);
+		}
+
+		for (CellConfigBean cellConfigBean : cellConfigBeanList) {
+			// 获取坐标点
+			Point point = getPoint(cellConfigBean, ThreadLocalHelper.getCurrentHorizontalY());
+
+			// 获取区域值
+			String[][] regionValue = getRegionValue(point);
+
+			// 获取映射处理器
+			MappingProcessor mappingProcessor = MappingProcessorFactory
+					.buildMappingProcessor(cellConfigBean.getMappingProcessor());
+			// 获取处理结果
+			String value = mappingProcessor.mappingValue(regionValue);
+			// 做校验
+			doValidate(cellConfigBean, value);
+
+			// 退出处理器
+			if (null != sheetConfigBean.getExistProcessor()
+					&& !ExistProcessor.class.equals(sheetConfigBean.getExistProcessor())) {
+				ExistProcessor existProcessor = BeanUtils.getBean(sheetConfigBean.getExistProcessor());
+				if (existProcessor.exist(point, regionValue, value)) {
+					throw new ExitHorizontalExcelException();
+				}
+			}
+
+			try {
+				Field cellField = clazz.getDeclaredField(cellConfigBean.getFieldName());
+				cellField.setAccessible(true);
+
+				cellField.set(newInstance, value);
+			} catch (Exception e) {
+				throw new ExcelException(e.getMessage(), e);
+			}
+		}
+		return newInstance;
+	}
 
 	/**
 	 * 获取区域值
@@ -142,10 +204,12 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		return endY;
 	}
 
-	protected Point getPoint(CellConfigBean cellConfigBean) {
-		return getPoint(cellConfigBean, null);
-	}
-
+	/**
+	 * 获取坐标
+	 * @param cellConfigBean
+	 * @param y  threadlocal中存的当前y
+	 * @return
+	 */
 	protected Point getPoint(CellConfigBean cellConfigBean, Integer y) {
 		Character startX = getStartX(cellConfigBean);
 		Character endX = getEndX(cellConfigBean);
@@ -162,7 +226,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 
 	@Override
 	public void doValidate(CellConfigBean cellConfigBean, String value) throws ValidateExcelException {
-		List<ValidatorConfigBean> validatorBeanConfigList = cellConfigBean.getValidatorBeanConfigList();
+		List<ValidatorConfigBean> validatorBeanConfigList = cellConfigBean.getValidatorConfigBeanList();
 		for (ValidatorConfigBean validatorConfigBean : validatorBeanConfigList) {
 			// 校验器class类型
 			Class<? extends Validatable> validatorClass = validatorConfigBean.getType();

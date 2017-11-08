@@ -15,6 +15,8 @@ import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
 import com.imzy.excel.enums.SheetType;
+import com.imzy.excel.exceptions.XmlConfigExcelException;
+import com.imzy.excel.processer.ExistProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.mapping.SingleStringMappingProcessor;
@@ -77,6 +79,7 @@ public class XmlConfigParser {
 				String className = excelElement.attributeValue("class");
 				excelConfigBean.setClazz(Class.forName(className));
 				excelConfigBean.setName(name);
+
 				List<SheetConfigBean> sheetConfigBeanList = parseSheetNode(excelElement.elements("sheet"));
 
 				excelConfigBean.setSheetConfigBeanList(sheetConfigBeanList);
@@ -101,13 +104,27 @@ public class XmlConfigParser {
 			String fieldName = element.attributeValue("fieldName");
 			String name = element.attributeValue("name");
 			String type = element.attributeValue("type");
-			String order = element.attributeValue("order");
 			String startLine = element.attributeValue("startLine");
+			String existProcessor = element.attributeValue("existProcessor");
 			SheetConfigBean sheetConfigBean = new SheetConfigBean();
 			sheetConfigBean.setFieldName(fieldName);
 			sheetConfigBean.setName(name);
-			sheetConfigBean.setType(SheetType.valueOf(type.toUpperCase()));
-			sheetConfigBean.setOrder(Integer.parseInt(order));
+			SheetType sheetType = SheetType.valueOf(type.toUpperCase());
+			sheetConfigBean.setType(sheetType);
+
+			if (SheetType.HORIZONTAL.equals(sheetType)) {
+				if (StringUtils.isNotBlank(existProcessor)) {
+					try {
+						sheetConfigBean
+								.setExistProcessor((Class<? extends ExistProcessor>) Class.forName(existProcessor));
+					} catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+				} else {
+					throw new XmlConfigExcelException("横表模式必须配置existProcessor");
+				}
+			}
+
 			if (StringUtils.isNotBlank(startLine)) {
 				sheetConfigBean.setStartLine(Integer.parseInt(startLine.trim()));
 			}
@@ -165,7 +182,7 @@ public class XmlConfigParser {
 				}
 
 				List<ValidatorConfigBean> validatorBeanConfigList = parseCellNode(element.element("validators"));
-				cellConfigBean.setValidatorBeanConfigList(validatorBeanConfigList);
+				cellConfigBean.setValidatorConfigBeanList(validatorBeanConfigList);
 				cellConfigBeanList.add(cellConfigBean);
 			}
 		} catch (ClassNotFoundException e) {

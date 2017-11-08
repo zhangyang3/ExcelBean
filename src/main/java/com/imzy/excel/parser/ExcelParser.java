@@ -50,7 +50,7 @@ public class ExcelParser {
 				}
 
 				// 获取具体的sheet页
-				ThreadLocalHelper.setCurrentSheet(wb.getSheetAt((sheetConfigBean.getOrder() - 1)));
+				ThreadLocalHelper.setCurrentSheet(wb.getSheet(sheetConfigBean.getName()));
 				// 获取sheet具体的class
 				Class<?> excelFieldType = excelFiled.getType();
 				// 校验sheet类型

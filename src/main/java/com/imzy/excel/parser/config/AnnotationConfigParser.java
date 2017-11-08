@@ -14,6 +14,7 @@ import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
+import com.imzy.excel.enums.CellType;
 import com.imzy.excel.exceptions.AnnotationConfigExcelException;
 import com.imzy.excel.support.ThreadLocalHelper;
 
@@ -68,9 +69,9 @@ public class AnnotationConfigParser {
 		SheetConfigBean sheetConfigBean = new SheetConfigBean();
 		sheetConfigBean.setFieldName(sheetfield.getName());
 		sheetConfigBean.setName(sheetAnnotation.name());
-		sheetConfigBean.setOrder(sheetAnnotation.order());
 		sheetConfigBean.setStartLine(sheetAnnotation.startLine());
 		sheetConfigBean.setType(sheetAnnotation.type());
+		sheetConfigBean.setExistProcessor(sheetAnnotation.existProcessor());
 
 		List<CellConfigBean> cellConfigBeanList = new ArrayList<CellConfigBean>();
 		Class<?> type = sheetfield.getType();
@@ -103,9 +104,28 @@ public class AnnotationConfigParser {
 		cellConfigBean.setFieldName(cellField.getName());
 		cellConfigBean.setMappingProcessor(cellAnnotation.mappingProcessor());
 		cellConfigBean.setName(cellAnnotation.name());
+		cellConfigBean.setCellType(cellAnnotation.cellType());
+
+		List<CellConfigBean> cellConfigBeanList = new ArrayList<CellConfigBean>();
+		if (!CellType.SINGLEVALUE.equals(cellAnnotation.cellType())) {
+			Class<?> type = cellField.getType();
+			// 如果type是集合类型，需要获取泛型的类型
+			if (Collection.class.isAssignableFrom(type)) {
+				type = (Class<?>) ((ParameterizedType) cellField.getGenericType()).getActualTypeArguments()[0];
+			}
+
+			Field[] declaredFields = type.getDeclaredFields();
+			for (Field field : declaredFields) {
+				Cell innerCellAnnotation = field.getAnnotation(Cell.class);
+				if (null != innerCellAnnotation) {
+					cellConfigBeanList.add(parseCellNode(field));
+				}
+			}
+		}
+		cellConfigBean.setCellConfigBeanList(cellConfigBeanList);
 
 		List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(cellAnnotation.validators());
-		cellConfigBean.setValidatorBeanConfigList(validatorBeanConfigList);
+		cellConfigBean.setValidatorConfigBeanList(validatorBeanConfigList);
 		return cellConfigBean;
 	}
 

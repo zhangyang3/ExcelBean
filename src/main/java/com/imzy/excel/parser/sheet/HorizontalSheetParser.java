@@ -6,14 +6,9 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
-import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.exceptions.ExitHorizontalExcelException;
-import com.imzy.excel.processer.MappingProcessor;
-import com.imzy.excel.processer.mapping.MappingProcessorFactory;
 import com.imzy.excel.support.ConfigBeanHelper;
 import com.imzy.excel.support.ThreadLocalHelper;
 
@@ -40,12 +35,15 @@ public class HorizontalSheetParser extends BaseSheetParser {
 		int physicalNumberOfRows = currentSheet.getPhysicalNumberOfRows();
 		for (int i = startLine; i < physicalNumberOfRows; i++) {
 			try {
+				ThreadLocalHelper.setCurrentHorizontalY(i);
 				// 添加每行值
-				Object tClazzObject = buildObject(field, (Class) tClazz, i);
+				Object tClazzObject = buildObject(field, (Class) tClazz);
 				list.add(tClazzObject);
 			} catch (ExitHorizontalExcelException e) {
 				// 如果行结束，跳出循环
 				break;
+			} finally {
+				ThreadLocalHelper.clearCurrentHorizontalY();
 			}
 		}
 
@@ -58,51 +56,17 @@ public class HorizontalSheetParser extends BaseSheetParser {
 	 * @param y
 	 * @return
 	 */
-	private <T> T buildObject(Field field, Class<T> clazz, int y) {
+	private <T> T buildObject(Field field, Class<T> clazz) {
 
-		T newInstance = null;
-		try {
-			newInstance = clazz.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-
-		// 获取excel下面的cell列表
+		// 获取excel下面的cell配置列表
 		List<CellConfigBean> cellConfigBeanList = ConfigBeanHelper
 				.getCellConfigBeanListBySheetFieldName(field.getName());
-		for (CellConfigBean cellConfigBean : cellConfigBeanList) {
-			// 获取坐标点
-			Point point = getPoint(cellConfigBean, y);
+		// 获取excel的配置
+		SheetConfigBean sheetConfigBean = ConfigBeanHelper.getSheetConfigBean(field.getName());
 
-			// 获取区域值
-			String[][] regionValue = getRegionValue(point);
+		T buildBean = buildBean(clazz, cellConfigBeanList, sheetConfigBean);
 
-			// 获取映射处理器
-			MappingProcessor mappingProcessor = MappingProcessorFactory
-					.buildMappingProcessor(cellConfigBean.getMappingProcessor());
-			// 获取处理结果
-			String value = mappingProcessor.mappingValue(regionValue);
-			// 做校验
-			doValidate(cellConfigBean, value);
-
-			// 如果a列没有数据，则认为行扫描结束
-			if (Character.toLowerCase(point.getStartX()) == 'a' && StringUtils.isBlank(value)) {
-				throw new ExitHorizontalExcelException();
-			}
-
-			try {
-				Field f = clazz.getDeclaredField(cellConfigBean.getFieldName());
-				f.setAccessible(true);
-
-				f.set(newInstance, value);
-			} catch (Exception e) {
-				throw new ExcelException(e.getMessage(), e);
-			}
-		}
-
-		return newInstance;
+		return buildBean;
 	}
 
 }

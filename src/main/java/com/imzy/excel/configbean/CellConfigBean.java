@@ -2,6 +2,7 @@ package com.imzy.excel.configbean;
 
 import java.util.List;
 
+import com.imzy.excel.enums.CellType;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 
@@ -31,5 +32,9 @@ public class CellConfigBean {
 
 	Class<? extends PositionProcessor> positionProcessor;
 
-	List<ValidatorConfigBean> validatorBeanConfigList;
+	CellType cellType;
+
+	List<CellConfigBean> cellConfigBeanList;
+
+	List<ValidatorConfigBean> validatorConfigBeanList;
 }

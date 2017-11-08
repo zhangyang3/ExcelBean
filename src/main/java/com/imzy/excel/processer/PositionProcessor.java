@@ -9,20 +9,32 @@ import org.apache.poi.ss.usermodel.Sheet;
  */
 public interface PositionProcessor {
 
-	/** 开始x坐标
-	 * @param sheet */
+	/**
+	 * 开始x坐标
+	 * @param sheet
+	 * @return
+	 */
 	Character getStartX(Sheet sheet);
 
-	/** 结束x坐标
-	 * @param sheet */
+	/**
+	 * 结束x坐标
+	 * @param sheet
+	 * @return
+	 */
 	Character getEndX(Sheet sheet);
 
-	/** 开始y坐标
-	 * @param sheet */
+	/**
+	 * 开始y坐标
+	 * @param sheet
+	 * @return
+	 */
 	Integer getStartY(Sheet sheet);
 
-	/** 结束y坐标
-	 * @param sheet */
+	/**
+	 * 结束y坐标
+	 * @param sheet
+	 * @return
+	 */
 	Integer getEndY(Sheet sheet);
 
 }

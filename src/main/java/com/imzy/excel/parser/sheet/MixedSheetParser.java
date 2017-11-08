@@ -7,11 +7,12 @@ import java.lang.reflect.Field;
  * @author yangzhang7
  *
  */
-public class MixedSheetParser implements SheetParser {
+public class MixedSheetParser extends VerticalSheetParser {
 
 	@Override
 	public <T> T parse(Field field, Class<T> clazz) {
-		// TODO Auto-generated method stub
+		// T parse = super.parse(field, clazz);
+
 		return null;
 	}
 

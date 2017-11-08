@@ -8,7 +8,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.util.SheetUtils;
 
-public class SqcldjXmPositionProcessor implements PositionProcessor {
+public class SqcldjHoriPositionProcessor implements PositionProcessor {
 	private Cell positionCell;
 
 	private Cell getCell(Sheet sheet) {
@@ -31,18 +31,18 @@ public class SqcldjXmPositionProcessor implements PositionProcessor {
 
 	@Override
 	public Character getEndX(Sheet sheet) {
-		return 'b';
+		return 'f';
 	}
 
 	@Override
 	public Integer getStartY(Sheet sheet) {
-		Cell cell = getCell(sheet);
-		return cell.getRowIndex() + 1;
+		return 6;
 	}
 
 	@Override
 	public Integer getEndY(Sheet sheet) {
-		return getStartY(sheet);
+		Cell cell = getCell(sheet);
+		return cell.getRowIndex();
 	}
 
 }
