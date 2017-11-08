@@ -50,48 +50,92 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		return result;
 	}
 
-	protected char getEndX(CellConfigBean cellConfigBean) {
+	/**
+	 * 获取结束x坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private char getEndX(CellConfigBean cellConfigBean) {
 		char endX = cellConfigBean.getEndX();
-		Class<? extends PositionProcessor> endXPositionProcesser = cellConfigBean.getEndXPositionProcesser();
-		if (null != endXPositionProcesser && !PositionProcessor.class.equals(endXPositionProcesser)) {
-			// TODO 位置处理器
-			endX = 'a';
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
+			try {
+				PositionProcessor newInstance = positionProcesser.newInstance();
+				endX = newInstance.getEndX();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return endX;
 	}
 
-	protected char getStartX(CellConfigBean cellConfigBean) {
+	/**
+	 * 获取开始x坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private char getStartX(CellConfigBean cellConfigBean) {
 		char startX = cellConfigBean.getStartX();
 
-		Class<? extends PositionProcessor> startXPositionProcesser = cellConfigBean.getStartXPositionProcesser();
-		if (null != startXPositionProcesser && !PositionProcessor.class.equals(startXPositionProcesser)) {
-			// TODO 位置处理器
-			startX = 'a';
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
+			try {
+				PositionProcessor newInstance = positionProcesser.newInstance();
+				startX = newInstance.getStartX();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return startX;
 	}
 
-	protected int getStartY(CellConfigBean cellConfigBean) {
+	/**
+	 * 获取开始y坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private int getStartY(CellConfigBean cellConfigBean) {
 		int startY = cellConfigBean.getStartY();
 
-		Class<? extends PositionProcessor> startYPositionProcesser = cellConfigBean.getStartYPositionProcesser();
-		if (null != startYPositionProcesser && !PositionProcessor.class.equals(startYPositionProcesser)) {
-			// TODO 位置处理器
-			startY = 0;
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
+			try {
+				PositionProcessor newInstance = positionProcesser.newInstance();
+				startY = newInstance.getStartY();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return startY;
 	}
 
-	protected int getEndY(CellConfigBean cellConfigBean) {
+	/**
+	 * 获取结束y坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private int getEndY(CellConfigBean cellConfigBean) {
 		int endY = cellConfigBean.getEndY();
 
-		Class<? extends PositionProcessor> endYPositionProcesser = cellConfigBean.getEndYPositionProcesser();
-		if (null != endYPositionProcesser && !PositionProcessor.class.equals(endYPositionProcesser)) {
-			// TODO 位置处理器
-			endY = 0;
+		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcesser();
+		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
+			try {
+				PositionProcessor newInstance = positionProcesser.newInstance();
+				endY = newInstance.getEndY();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		return endY;

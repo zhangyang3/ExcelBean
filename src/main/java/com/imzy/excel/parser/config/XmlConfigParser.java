@@ -137,10 +137,7 @@ public class XmlConfigParser {
 				String startY = element.attributeValue("startY");
 				String endY = element.attributeValue("endY");
 				String mappingProcessor = element.attributeValue("mappingProcessor");
-				String startXPositionProcesser = element.attributeValue("startXPositionProcesser");
-				String endXPositionProcesser = element.attributeValue("endXPositionProcesser");
-				String startYPositionProcesser = element.attributeValue("startYPositionProcesser");
-				String endYPositionProcesser = element.attributeValue("endYPositionProcesser");
+				String positionProcesser = element.attributeValue("positionProcesser");
 				CellConfigBean cellConfigBean = new CellConfigBean();
 				cellConfigBean.setName(name);
 				cellConfigBean.setFieldName(fieldName);
@@ -158,21 +155,9 @@ public class XmlConfigParser {
 				} else {
 					cellConfigBean.setMappingProcessor(SingleStringMappingProcessor.class);
 				}
-				if (StringUtils.isNotBlank(startXPositionProcesser)) {
-					cellConfigBean.setStartXPositionProcesser(
-							(Class<? extends PositionProcessor>) Class.forName(startXPositionProcesser.trim()));
-				}
-				if (StringUtils.isNotBlank(endXPositionProcesser)) {
-					cellConfigBean.setEndXPositionProcesser(
-							(Class<? extends PositionProcessor>) Class.forName(endXPositionProcesser.trim()));
-				}
-				if (StringUtils.isNotBlank(startYPositionProcesser)) {
-					cellConfigBean.setStartYPositionProcesser(
-							(Class<? extends PositionProcessor>) Class.forName(startYPositionProcesser.trim()));
-				}
-				if (StringUtils.isNotBlank(endYPositionProcesser)) {
-					cellConfigBean.setEndYPositionProcesser(
-							(Class<? extends PositionProcessor>) Class.forName(endYPositionProcesser.trim()));
+				if (StringUtils.isNotBlank(positionProcesser)) {
+					cellConfigBean.setPositionProcesser(
+							(Class<? extends PositionProcessor>) Class.forName(positionProcesser.trim()));
 				}
 
 				List<ValidatorConfigBean> validatorBeanConfigList = parseCellNode(element.element("validators"));

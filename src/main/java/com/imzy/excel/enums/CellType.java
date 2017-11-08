@@ -7,7 +7,7 @@ package com.imzy.excel.enums;
  */
 public enum CellType {
 	/** 单值模式*/
-	NORMAL,
+	SINGLEVALUE,
 	/** 竖表模式*/
 	VERTICAL,
 	/** 横表模式*/

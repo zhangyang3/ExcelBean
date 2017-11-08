@@ -7,6 +7,11 @@ import java.lang.annotation.Target;
 
 import com.imzy.excel.validator.Validatable;
 
+/**
+ * 校验器注解
+ * @author yangzhang7
+ *
+ */
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Validator {

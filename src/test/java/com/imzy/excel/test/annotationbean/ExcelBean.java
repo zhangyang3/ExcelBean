@@ -22,4 +22,7 @@ public class ExcelBean {
 
 	@Sheet(name = "附表1特别程序要素", order = 2, type = SheetType.HORIZONTAL, startLine = 3)
 	private List<Special> specialList;
+
+	@Sheet(name = "申请材料清理情况登记表", order = 3, type = SheetType.MIXED)
+	private Sqcldj sqcldj;
 }

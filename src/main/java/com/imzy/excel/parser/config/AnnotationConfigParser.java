@@ -96,16 +96,13 @@ public class AnnotationConfigParser {
 
 		CellConfigBean cellConfigBean = new CellConfigBean();
 		cellConfigBean.setEndX(cellAnnotation.endX());
-		cellConfigBean.setEndXPositionProcesser(cellAnnotation.endXPositionProcesser());
 		cellConfigBean.setEndY(cellAnnotation.endY());
-		cellConfigBean.setEndYPositionProcesser(cellAnnotation.endYPositionProcesser());
+		cellConfigBean.setStartX(cellAnnotation.startX());
+		cellConfigBean.setStartY(cellAnnotation.startY());
+		cellConfigBean.setPositionProcesser(cellAnnotation.positionProcesser());
 		cellConfigBean.setFieldName(cellField.getName());
 		cellConfigBean.setMappingProcessor(cellAnnotation.mappingProcessor());
 		cellConfigBean.setName(cellAnnotation.name());
-		cellConfigBean.setStartX(cellAnnotation.startX());
-		cellConfigBean.setStartXPositionProcesser(cellAnnotation.startXPositionProcesser());
-		cellConfigBean.setStartY(cellAnnotation.startY());
-		cellConfigBean.setStartYPositionProcesser(cellAnnotation.startYPositionProcesser());
 
 		List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(cellAnnotation.validators());
 		cellConfigBean.setValidatorBeanConfigList(validatorBeanConfigList);

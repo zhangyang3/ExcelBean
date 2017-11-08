@@ -13,8 +13,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.parser.config.AnnotationConfigParser;
 import com.imzy.excel.parser.config.XmlConfigParser;
-import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.support.FlyExcelConst.Appendix;
+import com.imzy.excel.support.ThreadLocalHelper;
 
 /**
  * excel导入器
@@ -98,7 +98,10 @@ public class ExcelImporter {
 		} catch (Exception e) {
 			throw new ExcelException(e.getMessage(), e);
 		} finally {
+			// 清理线程变量
 			ThreadLocalHelper.clearCurrentWorkbook();
+			ThreadLocalHelper.clearCurrentSheet();
+			ThreadLocalHelper.clearCurrentExcelConfigBean();
 
 			if (is != null) {
 				try {

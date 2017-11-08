@@ -7,6 +7,11 @@ import java.lang.annotation.Target;
 
 import com.imzy.excel.enums.SheetType;
 
+/**
+ * sheet注解
+ * @author yangzhang7
+ *
+ */
 @Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Sheet {
