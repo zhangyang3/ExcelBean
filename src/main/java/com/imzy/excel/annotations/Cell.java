@@ -6,6 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.imzy.excel.enums.CellType;
+import com.imzy.excel.processer.ExistProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.mapping.SingleStringMappingProcessor;
@@ -47,6 +48,12 @@ public @interface Cell {
 	 * 默认值：CellType.SINGLEVALUE {@link com.imzy.excel.enums.CellType}
 	 */
 	CellType cellType() default CellType.SINGLEVALUE;
+
+	/**
+	 * 退出处理器<br>
+	 * CellType为CellType.HORIZONTAL时，需配置
+	 */
+	Class<? extends ExistProcessor> existProcessor() default ExistProcessor.class;
 
 	/**
 	 * 坐标处理器

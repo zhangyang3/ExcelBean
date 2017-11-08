@@ -155,6 +155,7 @@ public class XmlConfigParser {
 				String endY = element.attributeValue("endY");
 				String mappingProcessor = element.attributeValue("mappingProcessor");
 				String positionProcessor = element.attributeValue("positionProcessor");
+				String existProcessor = element.attributeValue("existProcessor");
 				CellConfigBean cellConfigBean = new CellConfigBean();
 				cellConfigBean.setName(name);
 				cellConfigBean.setFieldName(fieldName);
@@ -179,6 +180,10 @@ public class XmlConfigParser {
 				if (StringUtils.isNotBlank(positionProcessor)) {
 					cellConfigBean.setPositionProcessor(
 							(Class<? extends PositionProcessor>) Class.forName(positionProcessor.trim()));
+				}
+				if (StringUtils.isNotBlank(existProcessor)) {
+					cellConfigBean
+							.setExistProcessor((Class<? extends ExistProcessor>) Class.forName(existProcessor.trim()));
 				}
 
 				List<ValidatorConfigBean> validatorBeanConfigList = parseCellNode(element.element("validators"));

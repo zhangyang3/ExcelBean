@@ -2,11 +2,14 @@ package com.imzy.excel.support;
 
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 import org.apache.commons.lang3.StringUtils;
 
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
+import com.imzy.excel.enums.CellType;
 
 /**
  * 配置bean帮助类
@@ -50,15 +53,41 @@ public class ConfigBeanHelper {
 	}
 
 	/**
-	 * 获取某个sheet字段对应的cellConfigBean列表
+	 * 获取某个sheet字段中CellType值为CellType.SINGLEVALUE的cellConfigBean列表
 	 * @param sheetFieldName
 	 * @return
 	 */
-	public static List<CellConfigBean> getCellConfigBeanListBySheetFieldName(String sheetFieldName) {
+	public static List<CellConfigBean> getSignleValueCellConfigBeanListBySheetFieldName(String sheetFieldName) {
+		return getSomeCellConfigBeanListBySheetFieldNameAndCellType(sheetFieldName, CellType.SINGLEVALUE);
+	}
+
+	/**
+	 * 获取某个sheet字段中CellType值为CellType.HORIZONTAL的cellConfigBean列表
+	 * @param sheetFieldName
+	 * @return
+	 */
+	public static List<CellConfigBean> getHorizontalCellConfigBeanListBySheetFieldName(String sheetFieldName) {
+		return getSomeCellConfigBeanListBySheetFieldNameAndCellType(sheetFieldName, CellType.HORIZONTAL);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static List<CellConfigBean> getSomeCellConfigBeanListBySheetFieldNameAndCellType(String sheetFieldName,
+			final CellType cellType) {
 		List<SheetConfigBean> sheetConfigBeanList = getSheetConfigBeanList();
 		for (SheetConfigBean sheetConfigBean : sheetConfigBeanList) {
 			if (StringUtils.equals(sheetFieldName, sheetConfigBean.getFieldName())) {
-				return sheetConfigBean.getCellConfigBeanList();
+				return (List<CellConfigBean>) CollectionUtils.select(sheetConfigBean.getCellConfigBeanList(),
+						new Predicate() {
+							@Override
+							public boolean evaluate(Object object) {
+								CellConfigBean cellConfigBean = (CellConfigBean) object;
+								if (cellType.equals(cellConfigBean.getCellType())) {
+									return true;
+								} else {
+									return false;
+								}
+							}
+						});
 			}
 		}
 

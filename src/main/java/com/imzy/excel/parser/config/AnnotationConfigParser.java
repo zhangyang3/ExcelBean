@@ -105,6 +105,7 @@ public class AnnotationConfigParser {
 		cellConfigBean.setMappingProcessor(cellAnnotation.mappingProcessor());
 		cellConfigBean.setName(cellAnnotation.name());
 		cellConfigBean.setCellType(cellAnnotation.cellType());
+		cellConfigBean.setExistProcessor(cellAnnotation.existProcessor());
 
 		List<CellConfigBean> cellConfigBeanList = new ArrayList<CellConfigBean>();
 		if (!CellType.SINGLEVALUE.equals(cellAnnotation.cellType())) {

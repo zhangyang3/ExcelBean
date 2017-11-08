@@ -7,7 +7,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import com.imzy.excel.configbean.CellConfigBean;
-import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
 import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.exceptions.ExitHorizontalExcelException;
@@ -38,7 +37,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @return
 	 */
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> cellConfigBeanList,
-			SheetConfigBean sheetConfigBean) {
+			Class<? extends ExistProcessor> existProcessorClass) {
 
 		// 反射一个bean
 		T newInstance = null;
@@ -64,9 +63,8 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			doValidate(cellConfigBean, value);
 
 			// 退出处理器
-			if (null != sheetConfigBean.getExistProcessor()
-					&& !ExistProcessor.class.equals(sheetConfigBean.getExistProcessor())) {
-				ExistProcessor existProcessor = BeanUtils.getBean(sheetConfigBean.getExistProcessor());
+			if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
+				ExistProcessor existProcessor = BeanUtils.getBean(existProcessorClass);
 				if (existProcessor.exist(point, regionValue, value)) {
 					throw new ExitHorizontalExcelException();
 				}
@@ -106,6 +104,33 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			for (int j = 0; j < arrayX; j++) {
 				org.apache.poi.ss.usermodel.Cell cell = row.getCell(Character.toLowerCase(startX) - 'a' + j);
 				result[i][j] = SheetUtils.getCellValue(cell);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	 * 从regionValue删选数据
+	 * @param point
+	 * @param regionValue
+	 * @return
+	 */
+	protected String[][] getRegionValue(Point point, String[][] regionValue) {
+		// 初始化参数
+		char startX = point.getStartX();
+		char endX = point.getEndX();
+		int startY = point.getStartY();
+		int endY = point.getEndY();
+
+		int arrayY = endY - startY + 1;
+		int arrayX = Character.toLowerCase(endX) - Character.toLowerCase(startX) + 1;
+		String[][] result = new String[arrayY][arrayX];
+
+		for (int i = 0; i < arrayY; i++) {
+			String[] row = regionValue[Character.toLowerCase(startY) - 1 + i];
+			for (int j = 0; j < arrayX; j++) {
+				result[i][j] = row[Character.toLowerCase(startX) - 'a' + j];
 			}
 		}
 

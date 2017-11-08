@@ -18,13 +18,13 @@ public class VerticalSheetParser extends BaseSheetParser {
 	public <T> T parse(Field field, Class<T> clazz) {
 
 		// 获取excel下面的cell配置列表
-		List<CellConfigBean> cellConfigBeanList = ConfigBeanHelper
-				.getCellConfigBeanListBySheetFieldName(field.getName());
+		List<CellConfigBean> singValueCellConfigBeanList = ConfigBeanHelper
+				.getSignleValueCellConfigBeanListBySheetFieldName(field.getName());
 		// 获取excel的配置
 		SheetConfigBean sheetConfigBean = ConfigBeanHelper.getSheetConfigBean(field.getName());
 
 		// 构建bean
-		T newInstance = buildBean(clazz, cellConfigBeanList, sheetConfigBean);
+		T newInstance = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor());
 
 		return newInstance;
 	}
