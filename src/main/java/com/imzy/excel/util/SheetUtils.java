@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import com.imzy.excel.support.FlyExcelConst;
+import com.imzy.excel.support.ExcelBeanConst;
 
 /**
  * sheet工具类
@@ -38,7 +38,7 @@ public class SheetUtils {
 		if (split.length == 1) {
 			char c1 = Character.toLowerCase(split[0]);
 			return c1 - 'a';
-		} else if (split.length == FlyExcelConst.COLUMN_LENGTH) {
+		} else if (split.length == ExcelBeanConst.COLUMN_LENGTH) {
 			char c1 = Character.toLowerCase(split[0]);
 			char c2 = Character.toLowerCase(split[1]);
 			return (c1 - 'a') * 26 + (c2 - 'a');

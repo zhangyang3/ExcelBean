@@ -5,7 +5,7 @@ package com.imzy.excel.support;
  * @author yangzhang7
  *
  */
-public interface FlyExcelConst {
+public interface ExcelBeanConst {
 
 	public interface Appendix {
 

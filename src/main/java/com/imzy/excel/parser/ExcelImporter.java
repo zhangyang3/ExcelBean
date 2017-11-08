@@ -13,7 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.parser.config.AnnotationConfigParser;
 import com.imzy.excel.parser.config.XmlConfigParser;
-import com.imzy.excel.support.FlyExcelConst.Appendix;
+import com.imzy.excel.support.ExcelBeanConst.Appendix;
 import com.imzy.excel.support.ThreadLocalHelper;
 
 /**

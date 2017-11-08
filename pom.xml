@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.imzy</groupId>
-	<artifactId>FlyExcel</artifactId>
+	<artifactId>ExcelBean</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>FlyExcel</name>
+	<name>ExcelBean</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
