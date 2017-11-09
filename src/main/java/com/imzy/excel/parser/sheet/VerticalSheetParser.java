@@ -3,6 +3,10 @@ package com.imzy.excel.parser.sheet;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.enums.CellType;
 import com.imzy.excel.support.ConfigBeanHelper;
@@ -13,6 +17,7 @@ import com.imzy.excel.support.ConfigBeanHelper;
  *
  */
 public class VerticalSheetParser extends BaseSheetParser {
+	private static Logger logger = LoggerFactory.getLogger(VerticalSheetParser.class);
 
 	@Override
 	public <T> T parse(Field field, Class<T> clazz) {
@@ -23,6 +28,10 @@ public class VerticalSheetParser extends BaseSheetParser {
 
 		// 构建bean
 		T newInstance = buildBean(clazz, singValueCellConfigBeanList);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(JSONObject.toJSONString(newInstance));
+		}
 
 		return newInstance;
 	}

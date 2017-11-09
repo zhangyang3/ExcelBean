@@ -7,15 +7,17 @@ package com.imzy.excel.support;
  */
 public interface ExcelBeanConst {
 
+	/** xml文件*/
 	public interface XmlFile {
-
-		public interface Namespace {
+		/** 节点*/
+		public interface Node {
 			String EXCEL = "excel";
 			String SHEET = "sheet";
 			String CELL = "cell";
 			String VALIDATOR = "validator";
 		}
 
+		/** 属性*/
 		public interface Attribute {
 			String NAME = "name";
 			String CLASS = "class";
@@ -34,13 +36,44 @@ public interface ExcelBeanConst {
 		}
 	}
 
-	public interface Appendix {
+	/** 后缀*/
+	public interface Suffix {
 
 		String XLS = "xls";
 		String XLSX = "xlsx";
-
 	}
 
-	/** 列长度*/
-	int COLUMN_LENGTH = 2;
+	public interface Number {
+		/** "-1" */
+		String NEGATIVE_STR = "-1";
+		/** "0"*/
+		String ZERO_STR = "0";
+		/** "1"*/
+		String ONE_STR = "1";
+		/** "2"*/
+		String TWO_STR = "2";
+		/** "3"*/
+		String THREE_STR = "3";
+		/** "4"*/
+		String FOUR_STR = "4";
+		/** "5"*/
+		String FIVE_STR = "5";
+
+		/** -1*/
+		int NEGATIVE_INT = -1;
+		/** 0*/
+		int ZERO_INT = 0;
+		/** 1*/
+		int ONE_INT = 1;
+		/** 2*/
+		int TWO_INT = 2;
+		/** 3*/
+		int THREE_INT = 3;
+		/** 4*/
+		int FOUR_INT = 4;
+		/** 5*/
+		int FIVE_INT = 5;
+		/** 6*/
+		int SIX_INT = 6;
+	}
 }

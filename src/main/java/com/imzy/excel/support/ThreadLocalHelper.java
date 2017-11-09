@@ -12,10 +12,11 @@ import com.imzy.excel.configbean.ExcelConfigBean;
  */
 public class ThreadLocalHelper {
 
+	/** 当前工作簿*/
 	private static ThreadLocal<Workbook> currentWorkbook = new ThreadLocal<Workbook>();
-
+	/** 当前sheet页*/
 	private static ThreadLocal<Sheet> currentSheet = new ThreadLocal<Sheet>();
-
+	/** 当前excel配置bean*/
 	private static ThreadLocal<ExcelConfigBean> currentExcelConfigBean = new ThreadLocal<ExcelConfigBean>();
 
 	public static void clearCurrentExcelConfigBean() {

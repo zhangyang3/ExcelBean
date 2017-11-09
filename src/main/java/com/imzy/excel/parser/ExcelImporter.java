@@ -9,12 +9,14 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.parser.config.AnnotationConfigParser;
 import com.imzy.excel.parser.config.XmlConfigParser;
-import com.imzy.excel.support.ExcelBeanConst.Appendix;
+import com.imzy.excel.support.ExcelBeanConst.Suffix;
 import com.imzy.excel.support.ThreadLocalHelper;
 
 /**
@@ -23,6 +25,7 @@ import com.imzy.excel.support.ThreadLocalHelper;
  *
  */
 public class ExcelImporter {
+	private static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);
 
 	private static ExcelImporter excelImporter = new ExcelImporter();
 
@@ -35,8 +38,8 @@ public class ExcelImporter {
 
 	/**
 	 * 生成configBean
-	 * @param configPath
-	 * @param clazz
+	 * @param configPath xml方式下，xml配置文件
+	 * @param clazz annotation方式下，待解析的class
 	 */
 	public void initConfigBean(String configPath, Class<?> clazz) {
 		if (StringUtils.isNoneBlank(configPath)) {
@@ -45,7 +48,9 @@ public class ExcelImporter {
 		if (null != clazz) {
 			AnnotationConfigParser.getInstance().parse(clazz);
 		}
-		System.out.println(JSONObject.toJSONString(ThreadLocalHelper.getCurrentExcelConfigBean()));
+		if (logger.isDebugEnabled()) {
+			logger.debug(JSONObject.toJSONString(ThreadLocalHelper.getCurrentExcelConfigBean()));
+		}
 	}
 
 	/**
@@ -67,7 +72,6 @@ public class ExcelImporter {
 	 */
 	public Object write(String url, Class<?> clazz) {
 		initConfigBean(null, clazz);
-
 		return write(new File(url));
 	}
 
@@ -76,24 +80,25 @@ public class ExcelImporter {
 		if (file.isDirectory() || !file.exists()) {
 			throw new ExcelException("excel文件不存在");
 		}
-		if (!file.getName().endsWith(Appendix.XLS) && !file.getName().endsWith(Appendix.XLSX)) {
+		if (!file.getName().endsWith(Suffix.XLS) && !file.getName().endsWith(Suffix.XLSX)) {
 			throw new ExcelException("文件不是excel");
 		}
 
 		Object result = null;
 		FileInputStream is = null;
-		Workbook wb = null;
+		Workbook workbook = null;
 
 		try {
 			is = new FileInputStream(file);
-			if (file.getName().endsWith(Appendix.XLS)) {
+			if (file.getName().endsWith(Suffix.XLS)) {
 				POIFSFileSystem fs = new POIFSFileSystem(is);
-				wb = new HSSFWorkbook(fs);
+				workbook = new HSSFWorkbook(fs);
 			} else {
-				wb = new XSSFWorkbook(is);
+				workbook = new XSSFWorkbook(is);
 			}
+			// 设置当前工作簿
+			ThreadLocalHelper.setCurrentWorkbook(workbook);
 
-			ThreadLocalHelper.setCurrentWorkbook(wb);
 			// 将excel转过bean
 			ExcelParser excelParser = new ExcelParser();
 			result = excelParser.parse();

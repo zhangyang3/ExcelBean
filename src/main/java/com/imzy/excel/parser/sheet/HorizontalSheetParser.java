@@ -5,6 +5,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.enums.CellType;
@@ -19,6 +23,7 @@ import com.imzy.excel.util.BeanUtils;
  *
  */
 public class HorizontalSheetParser extends BaseSheetParser {
+	private static Logger logger = LoggerFactory.getLogger(HorizontalSheetParser.class);
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -43,6 +48,10 @@ public class HorizontalSheetParser extends BaseSheetParser {
 				// 如果行结束，跳出循环
 				break;
 			}
+		}
+
+		if (logger.isDebugEnabled()) {
+			logger.debug(JSONObject.toJSONString(list));
 		}
 
 		return (T) list;

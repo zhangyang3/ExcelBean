@@ -13,6 +13,7 @@ import com.imzy.excel.parser.sheet.SheetParser;
 import com.imzy.excel.parser.sheet.SheetParserFactory;
 import com.imzy.excel.support.ConfigBeanHelper;
 import com.imzy.excel.support.ThreadLocalHelper;
+import com.imzy.excel.util.BeanUtils;
 
 /**
  * excel解析器
@@ -23,17 +24,12 @@ public class ExcelParser {
 
 	public Object parse() {
 		// 线程中workbook
-		Workbook wb = ThreadLocalHelper.getCurrentWorkbook();
-		// 当前excel的类
+		Workbook workbook = ThreadLocalHelper.getCurrentWorkbook();
+		// 当前excel的class类型
 		Class<?> excelClazz = ConfigBeanHelper.getExcelClass();
 
 		// 1.构建excelBean
-		Object excelBean = null;
-		try {
-			excelBean = excelClazz.newInstance();
-		} catch (Exception e) {
-			throw new ExcelException(e.getMessage(), e);
-		}
+		Object excelBean = BeanUtils.getBean(excelClazz);
 
 		// 2.设置excelBean的字段值
 		List<SheetConfigBean> sheetConfigBeanList = ConfigBeanHelper.getSheetConfigBeanList();
@@ -41,7 +37,6 @@ public class ExcelParser {
 			SheetType sheetType = sheetConfigBean.getType();
 			try {
 				Field excelFiled = excelClazz.getDeclaredField(sheetConfigBean.getFieldName());
-				excelFiled.setAccessible(true);
 
 				// 获取具体的sheet处理器
 				SheetParser sheetParser = SheetParserFactory.buildSheetParser(sheetType);
@@ -50,15 +45,14 @@ public class ExcelParser {
 				}
 
 				// 获取具体的sheet页
-				ThreadLocalHelper.setCurrentSheet(wb.getSheet(sheetConfigBean.getName()));
+				ThreadLocalHelper.setCurrentSheet(workbook.getSheet(sheetConfigBean.getName()));
 				// 获取sheet具体的class
 				Class<?> excelFieldType = excelFiled.getType();
 				// 校验sheet类型
 				validateSheetType(excelFieldType, sheetType);
 
-				Object bean = sheetParser.parse(excelFiled, excelFieldType);
-
-				excelFiled.set(excelBean, bean);
+				Object value = sheetParser.parse(excelFiled, excelFieldType);
+				BeanUtils.setValue(excelBean, excelFiled, value);
 			} catch (Exception e) {
 				throw new ExcelException(e.getMessage(), e);
 			} finally {

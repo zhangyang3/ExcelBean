@@ -9,6 +9,11 @@ import com.imzy.excel.enums.SheetType;
  */
 public class SheetParserFactory {
 
+	/**
+	 * 构建sheet解析器
+	 * @param sheetType sheet类型
+	 * @return
+	 */
 	public static SheetParser buildSheetParser(SheetType sheetType) {
 		SheetParser sheetParser = null;
 		if (SheetType.HORIZONTAL.equals(sheetType)) {

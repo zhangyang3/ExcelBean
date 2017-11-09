@@ -5,6 +5,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.enums.CellType;
 import com.imzy.excel.exceptions.ExcelException;
@@ -20,10 +24,11 @@ import com.imzy.excel.util.BeanUtils;
  *
  */
 public class MixedSheetParser extends VerticalSheetParser {
+	private static Logger logger = LoggerFactory.getLogger(MixedSheetParser.class);
 
 	@Override
 	public <T> T parse(Field field, Class<T> clazz) {
-		T parse = super.parse(field, clazz);
+		T newInstance = super.parse(field, clazz);
 
 		// 获取excel下面的CellType为HORIZONTAL的cell配置列表
 		List<CellConfigBean> horizontalCellConfigBeanList = ConfigBeanHelper
@@ -37,13 +42,17 @@ public class MixedSheetParser extends VerticalSheetParser {
 				Type genericType = BeanUtils.getGenericType(horizontalField);
 
 				List<Object> list = buildBeanList(cellConfigBean, (Class<?>) genericType);
-				BeanUtils.setValue(parse, horizontalField, list);
+				BeanUtils.setValue(newInstance, horizontalField, list);
 			} catch (Exception e) {
 				throw new ExcelException(e.getMessage(), e);
 			}
 		}
 
-		return parse;
+		if (logger.isDebugEnabled()) {
+			logger.debug(JSONObject.toJSONString(newInstance));
+		}
+
+		return newInstance;
 	}
 
 	/**

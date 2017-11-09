@@ -22,7 +22,7 @@ import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.mapping.SingleStringMappingProcessor;
 import com.imzy.excel.support.ExcelBeanConst.XmlFile.Attribute;
-import com.imzy.excel.support.ExcelBeanConst.XmlFile.Namespace;
+import com.imzy.excel.support.ExcelBeanConst.XmlFile.Node;
 import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.validator.Validatable;
 
@@ -55,7 +55,7 @@ public class XmlConfigParser {
 			Document document = reader.read(excelConfigFile);
 			Element root = document.getRootElement();
 
-			List<Element> elements = root.elements(Namespace.EXCEL);
+			List<Element> elements = root.elements(Node.EXCEL);
 			Element excelElement = null;
 			for (Element element : elements) {
 				if (StringUtils.equals(configName, element.attributeValue(Attribute.NAME))) {
@@ -83,7 +83,7 @@ public class XmlConfigParser {
 				excelConfigBean.setClazz(Class.forName(className.trim()));
 				excelConfigBean.setName(name.trim());
 
-				List<SheetConfigBean> sheetConfigBeanList = parseSheetNode(excelElement.elements(Namespace.SHEET));
+				List<SheetConfigBean> sheetConfigBeanList = parseSheetNode(excelElement.elements(Node.SHEET));
 
 				excelConfigBean.setSheetConfigBeanList(sheetConfigBeanList);
 			}
@@ -132,7 +132,7 @@ public class XmlConfigParser {
 
 			sheetConfigBean.setStartLine(StringUtils.isNotBlank(startLine) ? Integer.parseInt(startLine.trim()) : -1);
 
-			List<CellConfigBean> cellConfigBeanList = parseCellNode(element.elements(Namespace.CELL));
+			List<CellConfigBean> cellConfigBeanList = parseCellNode(element.elements(Node.CELL));
 			sheetConfigBean.setCellConfigBeanList(cellConfigBeanList);
 			sheetConfigBeanList.add(sheetConfigBean);
 		}
@@ -181,12 +181,12 @@ public class XmlConfigParser {
 
 				List<CellConfigBean> innercellConfigBeanList = new ArrayList<CellConfigBean>();
 				if (!CellType.SINGLEVALUE.equals(cellConfigBean.getCellType())) {
-					innercellConfigBeanList.addAll(parseCellNode(element.elements(Namespace.CELL)));
+					innercellConfigBeanList.addAll(parseCellNode(element.elements(Node.CELL)));
 				}
 				cellConfigBean.setCellConfigBeanList(innercellConfigBeanList);
 
 				List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(
-						element.elements(Namespace.VALIDATOR));
+						element.elements(Node.VALIDATOR));
 				cellConfigBean.setValidatorConfigBeanList(validatorBeanConfigList);
 				cellConfigBeanList.add(cellConfigBean);
 			}

@@ -5,7 +5,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import com.imzy.excel.support.ExcelBeanConst;
+import com.imzy.excel.support.ExcelBeanConst.Number;
 
 /**
  * sheet工具类
@@ -21,7 +21,6 @@ public class SheetUtils {
 	 * @return
 	 */
 	public static String getCellValue(Sheet sheet, String x, String y) {
-
 		Row row = sheet.getRow(Integer.valueOf(y) - 1);
 		Cell cell = row.getCell(getCellNum(x));
 
@@ -38,7 +37,7 @@ public class SheetUtils {
 		if (split.length == 1) {
 			char c1 = Character.toLowerCase(split[0]);
 			return c1 - 'a';
-		} else if (split.length == ExcelBeanConst.COLUMN_LENGTH) {
+		} else if (split.length == Number.TWO_INT) {
 			char c1 = Character.toLowerCase(split[0]);
 			char c2 = Character.toLowerCase(split[1]);
 			return (c1 - 'a') * 26 + (c2 - 'a');
