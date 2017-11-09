@@ -1,16 +1,17 @@
 package com.imzy.excel.parser.sheet;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
+import com.imzy.excel.enums.CellType;
 import com.imzy.excel.exceptions.ExitHorizontalExcelException;
 import com.imzy.excel.support.ConfigBeanHelper;
 import com.imzy.excel.support.ThreadLocalHelper;
+import com.imzy.excel.util.BeanUtils;
 
 /**
  * 水平sheet解析器
@@ -27,23 +28,20 @@ public class HorizontalSheetParser extends BaseSheetParser {
 		int startLine = sheetConfigBean.getStartLine();
 
 		// 获取泛型的class
-		Type tClazz = ((ParameterizedType) field.getGenericType()).getActualTypeArguments()[0];
+		Type tClazz = BeanUtils.getGenericType(field);
 
 		// 获取列表数据
 		List list = new ArrayList();
 		org.apache.poi.ss.usermodel.Sheet currentSheet = ThreadLocalHelper.getCurrentSheet();
 		int physicalNumberOfRows = currentSheet.getPhysicalNumberOfRows();
-		for (int i = startLine; i < physicalNumberOfRows; i++) {
+		for (int y = startLine; y < physicalNumberOfRows; y++) {
 			try {
-				ThreadLocalHelper.setCurrentHorizontalY(i);
 				// 添加每行值
-				Object tClazzObject = buildObject(field, (Class) tClazz);
+				Object tClazzObject = buildObject(field, (Class) tClazz, y);
 				list.add(tClazzObject);
 			} catch (ExitHorizontalExcelException e) {
 				// 如果行结束，跳出循环
 				break;
-			} finally {
-				ThreadLocalHelper.clearCurrentHorizontalY();
 			}
 		}
 
@@ -52,19 +50,20 @@ public class HorizontalSheetParser extends BaseSheetParser {
 
 	/**
 	 * 生成每一个泛型对象
+	 * @param field
 	 * @param clazz
-	 * @param y
+	 * @param y y坐标
 	 * @return
 	 */
-	private <T> T buildObject(Field field, Class<T> clazz) {
+	private <T> T buildObject(Field field, Class<T> clazz, Integer y) {
 
 		// 获取excel下面的cell配置列表
 		List<CellConfigBean> singValueCellConfigBeanList = ConfigBeanHelper
-				.getSignleValueCellConfigBeanListBySheetFieldName(field.getName());
+				.getSomeCellConfigBeanListBySheetFieldNameAndCellType(field.getName(), CellType.SINGLEVALUE);
 		// 获取excel的配置
 		SheetConfigBean sheetConfigBean = ConfigBeanHelper.getSheetConfigBean(field.getName());
 
-		T buildBean = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor());
+		T buildBean = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor(), y);
 
 		return buildBean;
 	}

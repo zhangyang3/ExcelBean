@@ -18,21 +18,6 @@ public class ThreadLocalHelper {
 
 	private static ThreadLocal<ExcelConfigBean> currentExcelConfigBean = new ThreadLocal<ExcelConfigBean>();
 
-	/** 当前横标的y*/
-	private static ThreadLocal<Integer> currentHorizontalY = new ThreadLocal<Integer>();
-
-	public static void clearCurrentHorizontalY() {
-		currentHorizontalY.remove();
-	}
-
-	public static void setCurrentHorizontalY(Integer y) {
-		currentHorizontalY.set(y);
-	}
-
-	public static Integer getCurrentHorizontalY() {
-		return currentHorizontalY.get();
-	}
-
 	public static void clearCurrentExcelConfigBean() {
 		currentExcelConfigBean.remove();
 	}

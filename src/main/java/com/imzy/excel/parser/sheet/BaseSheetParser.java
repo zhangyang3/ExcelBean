@@ -3,6 +3,7 @@ package com.imzy.excel.parser.sheet;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -13,7 +14,6 @@ import com.imzy.excel.exceptions.ExitHorizontalExcelException;
 import com.imzy.excel.exceptions.ValidateExcelException;
 import com.imzy.excel.parser.sheet.task.CommonTask;
 import com.imzy.excel.processer.ExistProcessor;
-import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.mapping.MappingProcessorFactory;
 import com.imzy.excel.support.ThreadLocalHelper;
@@ -32,49 +32,47 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	/**
 	 * 构建bean
 	 * @param clazz 待构建bean的类型
-	 * @param cellConfigBeanList 待构建bean中的cell配置列表
-	 * @param sheetConfigBean 带构建bean的sheet配置
-	 * @return
+	 * @param singleValueCellConfigBeanList 待构建bean中的cell配置列表
+	 * @return bean
 	 */
-	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> cellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass) {
+	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singValueCellConfigBeanList) {
+		return buildBean(clazz, singValueCellConfigBeanList, null, null);
+	}
+
+	/**
+	 * 构建bean
+	 * @param clazz 待构建bean的类型
+	 * @param singleValueCellConfigBeanList 待构建bean中的cell配置列表
+	 * @param sheetConfigBean 带构建bean的sheet配置
+	 * @param y y坐标
+	 * @return bean
+	 */
+	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
+			Class<? extends ExistProcessor> existProcessorClass, Integer y) {
 
 		// 反射一个bean
-		T newInstance = null;
-		try {
-			newInstance = clazz.newInstance();
-		} catch (Exception e) {
-			throw new ExcelException(e.getMessage(), e);
-		}
+		T newInstance = BeanUtils.getBean(clazz);
 
-		for (CellConfigBean cellConfigBean : cellConfigBeanList) {
+		for (CellConfigBean cellConfigBean : singleValueCellConfigBeanList) {
 			// 获取坐标点
-			Point point = getPoint(cellConfigBean, ThreadLocalHelper.getCurrentHorizontalY());
-
+			Point point = getPoint(cellConfigBean, y);
 			// 获取区域值
 			String[][] regionValue = getRegionValue(point);
 
-			// 获取映射处理器
-			MappingProcessor mappingProcessor = MappingProcessorFactory
-					.buildMappingProcessor(cellConfigBean.getMappingProcessor());
-			// 获取处理结果
-			String value = mappingProcessor.mappingValue(regionValue);
+			// 获取映射值
+			String value = MappingProcessorFactory.buildMappingProcessor(cellConfigBean.getMappingProcessor())
+					.mappingValue(regionValue);
 			// 做校验
 			doValidate(cellConfigBean, value);
-
-			// 退出处理器
-			if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
-				ExistProcessor existProcessor = BeanUtils.getBean(existProcessorClass);
-				if (existProcessor.exist(point, regionValue, value)) {
-					throw new ExitHorizontalExcelException();
-				}
+			// 做退出
+			if (doExist(existProcessorClass, point, value, regionValue)) {
+				throw new ExitHorizontalExcelException();
 			}
 
 			try {
 				Field cellField = clazz.getDeclaredField(cellConfigBean.getFieldName());
-				cellField.setAccessible(true);
 
-				cellField.set(newInstance, value);
+				BeanUtils.setValue(newInstance, cellField, value);
 			} catch (Exception e) {
 				throw new ExcelException(e.getMessage(), e);
 			}
@@ -84,8 +82,19 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 
 	/**
 	 * 获取区域值
+	 * @param cellConfigBean 配置数据
+	 * @param y y坐标
+	 * @return 区域值
+	 */
+	protected String[][] getRegionValue(CellConfigBean cellConfigBean, Integer y) {
+		Point point = getPoint(cellConfigBean, y);
+		return getRegionValue(point);
+	}
+
+	/**
+	 * 获取区域值
 	 * @param point 坐标点
-	 * @return
+	 * @return 区域值
 	 */
 	protected String[][] getRegionValue(Point point) {
 		// 初始化参数
@@ -111,10 +120,10 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	}
 
 	/**
-	 * 从regionValue删选数据
-	 * @param point
-	 * @param regionValue
-	 * @return
+	 * 从regionValue筛选数据
+	 * @param point 坐标点
+	 * @param regionValue 待筛选的区域值
+	 * @return 区域值
 	 */
 	protected String[][] getRegionValue(Point point, String[][] regionValue) {
 		// 初始化参数
@@ -252,17 +261,31 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	@Override
 	public void doValidate(CellConfigBean cellConfigBean, String value) throws ValidateExcelException {
 		List<ValidatorConfigBean> validatorBeanConfigList = cellConfigBean.getValidatorConfigBeanList();
-		for (ValidatorConfigBean validatorConfigBean : validatorBeanConfigList) {
-			// 校验器class类型
-			Class<? extends Validatable> validatorClass = validatorConfigBean.getType();
-			// 校验器参数
-			String param = validatorConfigBean.getParam();
-			Validatable buildValidator = ValidatableFactory.buildValidator(validatorClass);
 
-			if (!buildValidator.validate(value, param)) {
-				throw new ValidateExcelException(value + "不通过" + validatorClass);
+		if (CollectionUtils.isNotEmpty(validatorBeanConfigList)) {
+			for (ValidatorConfigBean validatorConfigBean : validatorBeanConfigList) {
+				// 校验器class类型
+				Class<? extends Validatable> validatorClass = validatorConfigBean.getType();
+				// 校验器参数
+				String param = validatorConfigBean.getParam();
+
+				if (!ValidatableFactory.buildValidator(validatorClass).validate(value, param)) {
+					throw new ValidateExcelException(value + "不通过" + validatorClass);
+				}
 			}
 		}
+	}
+
+	@Override
+	public boolean doExist(Class<? extends ExistProcessor> existProcessorClass, Point point, String value,
+			String[][] regionValue) {
+		if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
+			ExistProcessor existProcessor = BeanUtils.getBean(existProcessorClass);
+
+			return existProcessor.exist(point, regionValue, value);
+		}
+
+		return false;
 	}
 
 }

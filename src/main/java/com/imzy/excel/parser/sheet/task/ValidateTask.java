@@ -12,7 +12,7 @@ public interface ValidateTask {
 
 	/**
 	 * 做校验
-	 * @param cellConfigBean
+	 * @param cellConfigBean 配置bean
 	 * @param value 待校验的值
 	 * @throws ValidateExcelException
 	 */

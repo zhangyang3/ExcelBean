@@ -10,6 +10,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.parser.config.AnnotationConfigParser;
 import com.imzy.excel.parser.config.XmlConfigParser;
@@ -44,6 +45,7 @@ public class ExcelImporter {
 		if (null != clazz) {
 			AnnotationConfigParser.getInstance().parse(clazz);
 		}
+		System.out.println(JSONObject.toJSONString(ThreadLocalHelper.getCurrentExcelConfigBean()));
 	}
 
 	/**

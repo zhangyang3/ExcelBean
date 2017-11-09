@@ -26,7 +26,7 @@ public @interface Sheet {
 	SheetType type();
 
 	/** 数据开始行数*/
-	int startLine() default 1;
+	int startLine() default -1;
 
 	/** 
 	 * 退出处理器

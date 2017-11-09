@@ -13,7 +13,7 @@ public class Test1 {
 	private static String filePath = "D:\\附件4政务服务事项实施清单要素梳理表(1).xlsx";
 
 	public static void main(String[] args) {
-		// xmlconfig();
+		xmlconfig();
 		annotationconfig();
 	}
 

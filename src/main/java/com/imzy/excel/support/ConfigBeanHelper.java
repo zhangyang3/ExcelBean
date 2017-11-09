@@ -53,25 +53,13 @@ public class ConfigBeanHelper {
 	}
 
 	/**
-	 * 获取某个sheet字段中CellType值为CellType.SINGLEVALUE的cellConfigBean列表
+	 * 获取某个sheet字段中cellConfigBean列表
 	 * @param sheetFieldName
+	 * @param cellType
 	 * @return
 	 */
-	public static List<CellConfigBean> getSignleValueCellConfigBeanListBySheetFieldName(String sheetFieldName) {
-		return getSomeCellConfigBeanListBySheetFieldNameAndCellType(sheetFieldName, CellType.SINGLEVALUE);
-	}
-
-	/**
-	 * 获取某个sheet字段中CellType值为CellType.HORIZONTAL的cellConfigBean列表
-	 * @param sheetFieldName
-	 * @return
-	 */
-	public static List<CellConfigBean> getHorizontalCellConfigBeanListBySheetFieldName(String sheetFieldName) {
-		return getSomeCellConfigBeanListBySheetFieldNameAndCellType(sheetFieldName, CellType.HORIZONTAL);
-	}
-
 	@SuppressWarnings("unchecked")
-	private static List<CellConfigBean> getSomeCellConfigBeanListBySheetFieldNameAndCellType(String sheetFieldName,
+	public static List<CellConfigBean> getSomeCellConfigBeanListBySheetFieldNameAndCellType(String sheetFieldName,
 			final CellType cellType) {
 		List<SheetConfigBean> sheetConfigBeanList = getSheetConfigBeanList();
 		for (SheetConfigBean sheetConfigBean : sheetConfigBeanList) {

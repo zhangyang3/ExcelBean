@@ -2,8 +2,6 @@ package com.imzy.excel.configbean;
 
 import java.util.List;
 
-import com.imzy.excel.processer.ExistProcessor;
-
 import lombok.Data;
 
 /**
@@ -17,8 +15,6 @@ public class ExcelConfigBean {
 	Class<?> clazz;
 
 	String name;
-
-	Class<? extends ExistProcessor> existProcessor;
 
 	List<SheetConfigBean> sheetConfigBeanList;
 }
