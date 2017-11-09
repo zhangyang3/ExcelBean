@@ -4,6 +4,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * bean工具类
+ * @author yangzhang7
+ *
+ */
 public class BeanUtils {
 
 	/**

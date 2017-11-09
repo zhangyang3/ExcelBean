@@ -8,6 +8,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.util.SheetUtils;
 
+/**
+ * 
+ * @author yangzhang7
+ *
+ */
 public class SqcldjXmPositionProcessor implements PositionProcessor {
 	private Cell positionCell;
 

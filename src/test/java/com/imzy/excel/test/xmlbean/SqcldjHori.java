@@ -2,6 +2,11 @@ package com.imzy.excel.test.xmlbean;
 
 import lombok.Data;
 
+/**
+ * 
+ * @author yangzhang7
+ *
+ */
 @Data
 public class SqcldjHori {
 

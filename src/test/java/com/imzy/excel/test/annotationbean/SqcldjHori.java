@@ -4,6 +4,11 @@ import com.imzy.excel.annotations.Cell;
 
 import lombok.Data;
 
+/**
+ * 
+ * @author yangzhang7
+ *
+ */
 @Data
 public class SqcldjHori {
 

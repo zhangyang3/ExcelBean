@@ -21,6 +21,8 @@ import com.imzy.excel.processer.ExistProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.mapping.SingleStringMappingProcessor;
+import com.imzy.excel.support.ExcelBeanConst.XmlFile.Attribute;
+import com.imzy.excel.support.ExcelBeanConst.XmlFile.Namespace;
 import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.validator.Validatable;
 
@@ -53,10 +55,10 @@ public class XmlConfigParser {
 			Document document = reader.read(excelConfigFile);
 			Element root = document.getRootElement();
 
-			List<Element> elements = root.elements("excel");
+			List<Element> elements = root.elements(Namespace.EXCEL);
 			Element excelElement = null;
 			for (Element element : elements) {
-				if (StringUtils.equals(configName, element.attributeValue("name"))) {
+				if (StringUtils.equals(configName, element.attributeValue(Attribute.NAME))) {
 					excelElement = element;
 					break;
 				}
@@ -76,12 +78,12 @@ public class XmlConfigParser {
 		try {
 			if (null != excelElement) {
 				excelConfigBean = new ExcelConfigBean();
-				String name = excelElement.attributeValue("name");
-				String className = excelElement.attributeValue("class");
-				excelConfigBean.setClazz(Class.forName(className));
-				excelConfigBean.setName(name);
+				String name = excelElement.attributeValue(Attribute.NAME);
+				String className = excelElement.attributeValue(Attribute.CLASS);
+				excelConfigBean.setClazz(Class.forName(className.trim()));
+				excelConfigBean.setName(name.trim());
 
-				List<SheetConfigBean> sheetConfigBeanList = parseSheetNode(excelElement.elements("sheet"));
+				List<SheetConfigBean> sheetConfigBeanList = parseSheetNode(excelElement.elements(Namespace.SHEET));
 
 				excelConfigBean.setSheetConfigBeanList(sheetConfigBeanList);
 			}
@@ -102,11 +104,11 @@ public class XmlConfigParser {
 		List<SheetConfigBean> sheetConfigBeanList = new ArrayList<SheetConfigBean>();
 
 		for (Element element : sheetElements) {
-			String fieldName = element.attributeValue("fieldName");
-			String name = element.attributeValue("name");
-			String type = element.attributeValue("type");
-			String startLine = element.attributeValue("startLine");
-			String existProcessor = element.attributeValue("existProcessor");
+			String fieldName = element.attributeValue(Attribute.FIELD_NAME);
+			String name = element.attributeValue(Attribute.NAME);
+			String type = element.attributeValue(Attribute.TYPE);
+			String startLine = element.attributeValue(Attribute.START_LINE);
+			String existProcessor = element.attributeValue(Attribute.EXIST_PROCESSOR);
 			SheetConfigBean sheetConfigBean = new SheetConfigBean();
 			sheetConfigBean.setFieldName(fieldName.trim());
 			sheetConfigBean.setName(name.trim());
@@ -130,7 +132,7 @@ public class XmlConfigParser {
 
 			sheetConfigBean.setStartLine(StringUtils.isNotBlank(startLine) ? Integer.parseInt(startLine.trim()) : -1);
 
-			List<CellConfigBean> cellConfigBeanList = parseCellNode(element.elements("cell"));
+			List<CellConfigBean> cellConfigBeanList = parseCellNode(element.elements(Namespace.CELL));
 			sheetConfigBean.setCellConfigBeanList(cellConfigBeanList);
 			sheetConfigBeanList.add(sheetConfigBean);
 		}
@@ -148,16 +150,16 @@ public class XmlConfigParser {
 
 		try {
 			for (Element element : elements) {
-				String name = element.attributeValue("name");
-				String fieldName = element.attributeValue("fieldName");
-				String startX = element.attributeValue("startX");
-				String endX = element.attributeValue("endX");
-				String startY = element.attributeValue("startY");
-				String endY = element.attributeValue("endY");
-				String cellType = element.attributeValue("cellType");
-				String mappingProcessor = element.attributeValue("mappingProcessor");
-				String positionProcessor = element.attributeValue("positionProcessor");
-				String existProcessor = element.attributeValue("existProcessor");
+				String name = element.attributeValue(Attribute.NAME);
+				String fieldName = element.attributeValue(Attribute.FIELD_NAME);
+				String startX = element.attributeValue(Attribute.START_X);
+				String endX = element.attributeValue(Attribute.END_X);
+				String startY = element.attributeValue(Attribute.START_Y);
+				String endY = element.attributeValue(Attribute.END_Y);
+				String cellType = element.attributeValue(Attribute.CELL_TYPE);
+				String mappingProcessor = element.attributeValue(Attribute.MAPPING_PROCESSOR);
+				String positionProcessor = element.attributeValue(Attribute.POSITION_PROCESSOR);
+				String existProcessor = element.attributeValue(Attribute.EXIST_PROCESSOR);
 				CellConfigBean cellConfigBean = new CellConfigBean();
 				cellConfigBean.setName(StringUtils.isNotBlank(name) ? name.trim() : StringUtils.EMPTY);
 				cellConfigBean.setFieldName(fieldName.trim());
@@ -179,11 +181,12 @@ public class XmlConfigParser {
 
 				List<CellConfigBean> innercellConfigBeanList = new ArrayList<CellConfigBean>();
 				if (!CellType.SINGLEVALUE.equals(cellConfigBean.getCellType())) {
-					innercellConfigBeanList.addAll(parseCellNode(element.elements("cell")));
+					innercellConfigBeanList.addAll(parseCellNode(element.elements(Namespace.CELL)));
 				}
 				cellConfigBean.setCellConfigBeanList(innercellConfigBeanList);
 
-				List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(element.elements("validator"));
+				List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(
+						element.elements(Namespace.VALIDATOR));
 				cellConfigBean.setValidatorConfigBeanList(validatorBeanConfigList);
 				cellConfigBeanList.add(cellConfigBean);
 			}
@@ -203,8 +206,8 @@ public class XmlConfigParser {
 		List<ValidatorConfigBean> validatorConfigBeanList = new ArrayList<ValidatorConfigBean>();
 		try {
 			for (Element element : validators) {
-				String type = element.attributeValue("type");
-				String param = element.attributeValue("param");
+				String type = element.attributeValue(Attribute.TYPE);
+				String param = element.attributeValue(Attribute.PARAM);
 				ValidatorConfigBean validatorConfigBean = new ValidatorConfigBean();
 				validatorConfigBean.setType((Class<? extends Validatable>) Class.forName(type.trim()));
 				validatorConfigBean.setParam(StringUtils.isNotBlank(param) ? param.trim() : StringUtils.EMPTY);
