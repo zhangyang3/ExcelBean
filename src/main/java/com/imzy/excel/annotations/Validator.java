@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.imzy.excel.validator.Validatable;
+import com.imzy.excel.processer.ValidateProcessor;
 
 /**
  * 校验器注解
@@ -16,7 +16,7 @@ import com.imzy.excel.validator.Validatable;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Validator {
 
-	Class<? extends Validatable> type();
+	Class<? extends ValidateProcessor> type();
 
 	String param() default "";
 }

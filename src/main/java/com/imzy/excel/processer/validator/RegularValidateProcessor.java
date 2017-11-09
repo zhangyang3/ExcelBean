@@ -1,14 +1,16 @@
-package com.imzy.excel.validator;
+package com.imzy.excel.processer.validator;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.imzy.excel.processer.ValidateProcessor;
 
 /**
  * 正则校验器
  * @author yangzhang7
  *
  */
-public class RegularValidator implements Validatable {
+public class RegularValidateProcessor implements ValidateProcessor {
 
 	@Override
 	public boolean validate(String value, String validatorParam) {

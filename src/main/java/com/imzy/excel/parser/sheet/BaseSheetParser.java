@@ -19,12 +19,12 @@ import com.imzy.excel.parser.ExcelImporter;
 import com.imzy.excel.parser.sheet.task.CommonTask;
 import com.imzy.excel.processer.ExistProcessor;
 import com.imzy.excel.processer.PositionProcessor;
+import com.imzy.excel.processer.ValidateProcessor;
 import com.imzy.excel.processer.mapping.MappingProcessorFactory;
+import com.imzy.excel.processer.validator.ValidateProcessorFactory;
 import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.BeanUtils;
 import com.imzy.excel.util.SheetUtils;
-import com.imzy.excel.validator.Validatable;
-import com.imzy.excel.validator.ValidatableFactory;
 
 /**
  * 基础sheet解析器
@@ -104,11 +104,11 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		if (CollectionUtils.isNotEmpty(validatorBeanConfigList)) {
 			for (ValidatorConfigBean validatorConfigBean : validatorBeanConfigList) {
 				// 校验器class类型
-				Class<? extends Validatable> validatorClass = validatorConfigBean.getType();
+				Class<? extends ValidateProcessor> validatorClass = validatorConfigBean.getType();
 				// 校验器参数
 				String param = validatorConfigBean.getParam();
 
-				if (!ValidatableFactory.buildValidator(validatorClass).validate(value, param)) {
+				if (!ValidateProcessorFactory.buildValidator(validatorClass).validate(value, param)) {
 					throw new ValidateExcelException(value + "不通过" + validatorClass);
 				}
 			}

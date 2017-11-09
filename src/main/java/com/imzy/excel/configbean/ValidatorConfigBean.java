@@ -1,6 +1,6 @@
 package com.imzy.excel.configbean;
 
-import com.imzy.excel.validator.Validatable;
+import com.imzy.excel.processer.ValidateProcessor;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 public class ValidatorConfigBean {
 
-	Class<? extends Validatable> type;
+	Class<? extends ValidateProcessor> type;
 
 	String param;
 }

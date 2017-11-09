@@ -20,11 +20,11 @@ import com.imzy.excel.exceptions.XmlConfigExcelException;
 import com.imzy.excel.processer.ExistProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
+import com.imzy.excel.processer.ValidateProcessor;
 import com.imzy.excel.processer.mapping.SingleStringMappingProcessor;
 import com.imzy.excel.support.ExcelBeanConst.XmlFile.Attribute;
 import com.imzy.excel.support.ExcelBeanConst.XmlFile.Node;
 import com.imzy.excel.support.ThreadLocalHelper;
-import com.imzy.excel.validator.Validatable;
 
 /**
  * xml配置解析器
@@ -209,7 +209,7 @@ public class XmlConfigParser {
 				String type = element.attributeValue(Attribute.TYPE);
 				String param = element.attributeValue(Attribute.PARAM);
 				ValidatorConfigBean validatorConfigBean = new ValidatorConfigBean();
-				validatorConfigBean.setType((Class<? extends Validatable>) Class.forName(type.trim()));
+				validatorConfigBean.setType((Class<? extends ValidateProcessor>) Class.forName(type.trim()));
 				validatorConfigBean.setParam(StringUtils.isNotBlank(param) ? param.trim() : StringUtils.EMPTY);
 				validatorConfigBeanList.add(validatorConfigBean);
 			}

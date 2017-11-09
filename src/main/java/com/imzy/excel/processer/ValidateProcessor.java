@@ -1,11 +1,11 @@
-package com.imzy.excel.validator;
+package com.imzy.excel.processer;
 
 /**
  * 校验器
  * @author yangzhang7
  *
  */
-public interface Validatable {
+public interface ValidateProcessor {
 
 	/**
 	 * 校验
