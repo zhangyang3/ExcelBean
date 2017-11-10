@@ -14,7 +14,7 @@ public class Test1 {
 
 	public static void main(String[] args) {
 		xmlconfig();
-		// annotationconfig();
+		annotationconfig();
 	}
 
 	private static void xmlconfig() {

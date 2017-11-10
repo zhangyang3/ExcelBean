@@ -5,8 +5,10 @@ import java.util.List;
 import com.imzy.excel.annotations.Cell;
 import com.imzy.excel.enums.CellType;
 import com.imzy.excel.processer.exist.SimpleHorizontalExistProcessor;
+import com.imzy.excel.processer.exist.SimpleVerticalExistProcessor;
 import com.imzy.excel.test.bean.processor.position.SqcldjHoriPositionProcessor;
 import com.imzy.excel.test.bean.processor.position.SqcldjXmPositionProcessor;
+import com.imzy.excel.test.bean.processor.position.TshjPositionProcessor;
 
 import lombok.Data;
 
@@ -28,4 +30,6 @@ public class Sqcldj {
 	private String xhmc;
 	@Cell(positionProcessor = SqcldjHoriPositionProcessor.class, cellType = CellType.HORIZONTAL, existProcessor = SimpleHorizontalExistProcessor.class)
 	private List<SqcldjHori> sqcldjHoriList;
+	@Cell(positionProcessor = TshjPositionProcessor.class, cellType = CellType.VERTICAL, existProcessor = SimpleVerticalExistProcessor.class)
+	private List<Tshj> tshjList;
 }

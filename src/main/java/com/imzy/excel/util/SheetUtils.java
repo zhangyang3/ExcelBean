@@ -64,6 +64,9 @@ public class SheetUtils {
 		case Cell.CELL_TYPE_BOOLEAN:
 			cellValue = String.valueOf(cell.getBooleanCellValue());
 			break;
+		case Cell.CELL_TYPE_BLANK:
+			cellValue = StringUtils.EMPTY;
+			break;
 		default:
 		}
 		return cellValue;

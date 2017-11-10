@@ -41,8 +41,26 @@ public class MixedSheetParser extends BasicSheetParser {
 				// 获取HORIZONTAL标注的字段的集合中泛型
 				Type genericType = BeanUtils.getGenericType(horizontalField);
 
-				List<Object> list = buildBeanList(cellConfigBean, (Class<?>) genericType);
+				List<Object> list = buildHorizontalBeanList(cellConfigBean, (Class<?>) genericType);
 				BeanUtils.setValue(newInstance, horizontalField, list);
+			} catch (Exception e) {
+				throw new ExcelException(e.getMessage(), e);
+			}
+		}
+
+		// 获取excel下面的CellType为VERTICAL的cell配置列表
+		List<CellConfigBean> vertitalCellConfigBeanList = ConfigBeanHelper
+				.getSomeCellConfigBeanListBySheetFieldNameAndCellType(field.getName(), CellType.VERTICAL);
+
+		for (CellConfigBean cellConfigBean : vertitalCellConfigBeanList) {
+			try {
+				// 获取VERTICAL标注的字段
+				Field verticalField = clazz.getDeclaredField(cellConfigBean.getFieldName());
+				// 获取VERTICAL标注的字段的集合中泛型
+				Type genericType = BeanUtils.getGenericType(verticalField);
+
+				List<Object> list = buildVerticalBeanList(cellConfigBean, (Class<?>) genericType);
+				BeanUtils.setValue(newInstance, verticalField, list);
 			} catch (Exception e) {
 				throw new ExcelException(e.getMessage(), e);
 			}
@@ -56,12 +74,12 @@ public class MixedSheetParser extends BasicSheetParser {
 	}
 
 	/**
-	 * 构建bean列表
+	 * 构建横表的bean列表
 	 * @param cellConfigBean
 	 * @param genericTypeClass
 	 * @return
 	 */
-	private List<Object> buildBeanList(CellConfigBean cellConfigBean, Class<?> genericTypeClass) {
+	private List<Object> buildHorizontalBeanList(CellConfigBean cellConfigBean, Class<?> genericTypeClass) {
 		List<Object> list = new ArrayList<Object>();
 
 		// 获取外部区域值
@@ -71,6 +89,31 @@ public class MixedSheetParser extends BasicSheetParser {
 			try {
 				Object buildBean = buildBean(genericTypeClass, cellConfigBean.getCellConfigBeanList(),
 						cellConfigBean.getExistProcessor(), outerRegionValue, i + 1, null);
+				list.add(buildBean);
+			} catch (ExitHorizontalExcelException e) {
+				// 如果行结束，跳出循环
+				break;
+			}
+		}
+		return list;
+	}
+
+	/**
+	 * 构建竖表的bean列表
+	 * @param cellConfigBean
+	 * @param genericTypeClass
+	 * @return
+	 */
+	private List<Object> buildVerticalBeanList(CellConfigBean cellConfigBean, Class<?> genericTypeClass) {
+		List<Object> list = new ArrayList<Object>();
+
+		// 获取外部区域值
+		String[][] outerRegionValue = getRegionValue(cellConfigBean, null);
+
+		for (int i = 0; i < outerRegionValue[0].length; i++) {
+			try {
+				Object buildBean = buildBean(genericTypeClass, cellConfigBean.getCellConfigBeanList(),
+						cellConfigBean.getExistProcessor(), outerRegionValue, null, (char) (i + 'a'));
 				list.add(buildBean);
 			} catch (ExitHorizontalExcelException e) {
 				// 如果行结束，跳出循环

@@ -37,6 +37,11 @@
 				<cell startX="d" endX="d" fieldName="jy"/>
 				<cell startX="e" endX="e" fieldName="qljy"/>
 			</cell>
+			<cell fieldName="tshjList" cellType="VERTICAL" positionProcessor="com.imzy.excel.test.bean.processor.position.TshjPositionProcessor" existProcessor="com.imzy.excel.processer.exist.SimpleVerticalExistProcessor">
+				<cell startY="1" endY="1" fieldName="hjmc"/>
+				<cell startY="2" endY="2" fieldName="hjsj"/>
+				<cell startY="3" endY="3" fieldName="sdyj"/>
+			</cell>
 		</sheet>
 		<sheet name="竖表" type="VERTICAL" startColumn="b" fieldName="sbList" existProcessor="com.imzy.excel.processer.exist.SimpleVerticalExistProcessor">
 			<cell startY="1" endY="1" fieldName="hjmc"/>
