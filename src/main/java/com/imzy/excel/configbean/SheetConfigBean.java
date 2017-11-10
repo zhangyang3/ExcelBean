@@ -23,6 +23,8 @@ public class SheetConfigBean {
 
 	Integer startLine;
 
+	Character startColumn;
+
 	Class<? extends ExistProcessor> existProcessor;
 
 	List<CellConfigBean> cellConfigBeanList;

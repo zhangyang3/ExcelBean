@@ -73,9 +73,13 @@ public class ExcelParser {
 			if (!Collection.class.isAssignableFrom(type)) {
 				throw new ExcelException("SheetType.HORIZONTAL只能作用于Collection上");
 			}
+		} else if (SheetType.VERTICAL.equals(sheetType)) {
+			if (!Collection.class.isAssignableFrom(type)) {
+				throw new ExcelException("SheetType.VERTICAL只能作用于Collection上");
+			}
 		} else {
 			if (Collection.class.isAssignableFrom(type)) {
-				throw new ExcelException("非SheetType.HORIZONTAL只能作用于非Collection上");
+				throw new ExcelException("非SheetType.HORIZONTAL或非SheetType.VERTICAL只能作用于非Collection上");
 
 			}
 		}

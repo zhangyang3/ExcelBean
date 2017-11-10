@@ -14,7 +14,6 @@ import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.enums.CellType;
 import com.imzy.excel.exceptions.ExitHorizontalExcelException;
 import com.imzy.excel.support.ConfigBeanHelper;
-import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.BeanUtils;
 
 /**
@@ -22,27 +21,25 @@ import com.imzy.excel.util.BeanUtils;
  * @author yangzhang7
  *
  */
-public class HorizontalSheetParser extends BaseSheetParser {
-	private static Logger logger = LoggerFactory.getLogger(HorizontalSheetParser.class);
+public class VerticalSheetParser extends BaseSheetParser {
+	private static Logger logger = LoggerFactory.getLogger(VerticalSheetParser.class);
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public <T> T parse(Field field, Class<T> clazz) {
 		// 获取开始行数
 		SheetConfigBean sheetConfigBean = ConfigBeanHelper.getSheetConfigBean(field.getName());
-		int startLine = sheetConfigBean.getStartLine();
+		Character startColumn = sheetConfigBean.getStartColumn();
 
 		// 获取泛型的class
 		Type tClazz = BeanUtils.getGenericType(field);
 
 		// 获取列表数据
 		List list = new ArrayList();
-		org.apache.poi.ss.usermodel.Sheet currentSheet = ThreadLocalHelper.getCurrentSheet();
-		int physicalNumberOfRows = currentSheet.getPhysicalNumberOfRows();
-		for (int y = startLine; y < physicalNumberOfRows; y++) {
+		for (Character x = startColumn;; x++) {
 			try {
 				// 添加每行值
-				Object tClazzObject = buildObject(field, (Class) tClazz, y);
+				Object tClazzObject = buildObject(field, (Class) tClazz, x);
 				list.add(tClazzObject);
 			} catch (ExitHorizontalExcelException e) {
 				// 如果行结束，跳出循环
@@ -61,10 +58,10 @@ public class HorizontalSheetParser extends BaseSheetParser {
 	 * 生成每一个泛型对象
 	 * @param field
 	 * @param clazz
-	 * @param y y坐标
+	 * @param x x坐标
 	 * @return
 	 */
-	private <T> T buildObject(Field field, Class<T> clazz, Integer y) {
+	private <T> T buildObject(Field field, Class<T> clazz, Character x) {
 
 		// 获取excel下面的cell配置列表
 		List<CellConfigBean> singValueCellConfigBeanList = ConfigBeanHelper
@@ -72,7 +69,7 @@ public class HorizontalSheetParser extends BaseSheetParser {
 		// 获取excel的配置
 		SheetConfigBean sheetConfigBean = ConfigBeanHelper.getSheetConfigBean(field.getName());
 
-		T buildBean = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor(), y, null);
+		T buildBean = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor(), null, x);
 
 		return buildBean;
 	}

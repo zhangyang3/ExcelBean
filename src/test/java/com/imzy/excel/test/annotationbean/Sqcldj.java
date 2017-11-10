@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.imzy.excel.annotations.Cell;
 import com.imzy.excel.enums.CellType;
-import com.imzy.excel.processer.exist.SimpleExistProcessor;
+import com.imzy.excel.processer.exist.SimpleHorizontalExistProcessor;
 import com.imzy.excel.test.bean.processor.position.SqcldjHoriPositionProcessor;
 import com.imzy.excel.test.bean.processor.position.SqcldjXmPositionProcessor;
 
@@ -26,6 +26,6 @@ public class Sqcldj {
 	private String sxlb;
 	@Cell(startX = 'd', endX = 'f', startY = 4, endY = 4)
 	private String xhmc;
-	@Cell(positionProcessor = SqcldjHoriPositionProcessor.class, cellType = CellType.HORIZONTAL, existProcessor = SimpleExistProcessor.class)
+	@Cell(positionProcessor = SqcldjHoriPositionProcessor.class, cellType = CellType.HORIZONTAL, existProcessor = SimpleHorizontalExistProcessor.class)
 	private List<SqcldjHori> sqcldjHoriList;
 }

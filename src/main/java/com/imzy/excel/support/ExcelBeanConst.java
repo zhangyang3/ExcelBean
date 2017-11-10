@@ -33,6 +33,7 @@ public interface ExcelBeanConst {
 			String CELL_TYPE = "cellType";
 			String START_LINE = "startLine";
 			String PARAM = "param";
+			String START_COLUMN = "startColumn";
 		}
 	}
 

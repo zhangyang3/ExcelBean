@@ -70,7 +70,7 @@ public class MixedSheetParser extends BasicSheetParser {
 		for (int i = 0; i < outerRegionValue.length; i++) {
 			try {
 				Object buildBean = buildBean(genericTypeClass, cellConfigBean.getCellConfigBeanList(),
-						cellConfigBean.getExistProcessor(), outerRegionValue, i + 1);
+						cellConfigBean.getExistProcessor(), outerRegionValue, i + 1, null);
 				list.add(buildBean);
 			} catch (ExitHorizontalExcelException e) {
 				// 如果行结束，跳出循环
@@ -87,16 +87,17 @@ public class MixedSheetParser extends BasicSheetParser {
 	 * @param existProcessorClass 退出处理器
 	 * @param outerRegionValue 外部区域值
 	 * @param y y坐标，从1开始
+	 * @param x x坐标，从a开始
 	 * @return
 	 */
 	private <T> T buildBean(Class<T> clazz, List<CellConfigBean> cellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, String[][] outerRegionValue, int y) {
+			Class<? extends ExistProcessor> existProcessorClass, String[][] outerRegionValue, Integer y, Character x) {
 		// 1.构建空对象
 		T newInstance = BeanUtils.getBean(clazz);
 		// 2.往空对象塞值
 		for (CellConfigBean cellConfigBean : cellConfigBeanList) {
 			// 获取坐标点
-			Point point = getPoint(cellConfigBean, y);
+			Point point = getPoint(cellConfigBean, y, x);
 			// 获取区域值
 			String[][] regionValue = getRegionValue(point, outerRegionValue);
 
@@ -106,7 +107,7 @@ public class MixedSheetParser extends BasicSheetParser {
 			// 做校验
 			doValidate(cellConfigBean, value);
 			// 做退出
-			if (doExist(existProcessorClass, point, value, regionValue)) {
+			if (doExist(cellConfigBeanList, cellConfigBean, existProcessorClass, point, value, regionValue)) {
 				throw new ExitHorizontalExcelException();
 			}
 

@@ -108,6 +108,7 @@ public class XmlConfigParser {
 			String name = element.attributeValue(Attribute.NAME);
 			String type = element.attributeValue(Attribute.TYPE);
 			String startLine = element.attributeValue(Attribute.START_LINE);
+			String startColumn = element.attributeValue(Attribute.START_COLUMN);
 			String existProcessor = element.attributeValue(Attribute.EXIST_PROCESSOR);
 			SheetConfigBean sheetConfigBean = new SheetConfigBean();
 			sheetConfigBean.setFieldName(fieldName.trim());
@@ -115,7 +116,7 @@ public class XmlConfigParser {
 			SheetType sheetType = SheetType.valueOf(type.trim().toUpperCase());
 			sheetConfigBean.setType(sheetType);
 
-			if (SheetType.HORIZONTAL.equals(sheetType)) {
+			if (SheetType.HORIZONTAL.equals(sheetType) || SheetType.VERTICAL.equals(sheetType)) {
 				if (StringUtils.isNotBlank(existProcessor)) {
 					try {
 						sheetConfigBean.setExistProcessor(
@@ -124,12 +125,12 @@ public class XmlConfigParser {
 						e.printStackTrace();
 					}
 				} else {
-					throw new XmlConfigExcelException("横表模式必须配置existProcessor");
+					throw new XmlConfigExcelException("横表或竖表模式必须配置existProcessor");
 				}
 			} else {
 				sheetConfigBean.setExistProcessor(ExistProcessor.class);
 			}
-
+			sheetConfigBean.setStartColumn(StringUtils.isNotBlank(startColumn) ? startColumn.trim().charAt(0) : 0);
 			sheetConfigBean.setStartLine(StringUtils.isNotBlank(startLine) ? Integer.parseInt(startLine.trim()) : -1);
 
 			List<CellConfigBean> cellConfigBeanList = parseCellNode(element.elements(Node.CELL));

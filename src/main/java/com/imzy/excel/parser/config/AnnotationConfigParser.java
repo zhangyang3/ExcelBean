@@ -70,6 +70,7 @@ public class AnnotationConfigParser {
 		sheetConfigBean.setFieldName(sheetfield.getName());
 		sheetConfigBean.setName(sheetAnnotation.name());
 		sheetConfigBean.setStartLine(sheetAnnotation.startLine());
+		sheetConfigBean.setStartColumn(sheetAnnotation.startColumn());
 		sheetConfigBean.setType(sheetAnnotation.type());
 		sheetConfigBean.setExistProcessor(sheetAnnotation.existProcessor());
 

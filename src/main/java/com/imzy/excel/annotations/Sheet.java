@@ -28,9 +28,11 @@ public @interface Sheet {
 	/** 数据开始行数*/
 	int startLine() default -1;
 
+	/** 数据开始列数*/
+	char startColumn() default 0;
+
 	/** 
 	 * 退出处理器
-	 * PS：仅SheetType.HORIZONTAL使用
 	 */
 	Class<? extends ExistProcessor> existProcessor() default ExistProcessor.class;
 }

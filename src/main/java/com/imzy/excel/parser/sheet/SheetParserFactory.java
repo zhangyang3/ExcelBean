@@ -16,10 +16,12 @@ public class SheetParserFactory {
 	 */
 	public static SheetParser buildSheetParser(SheetType sheetType) {
 		SheetParser sheetParser = null;
-		if (SheetType.HORIZONTAL.equals(sheetType)) {
-			sheetParser = new HorizontalSheetParser();
-		} else if (SheetType.BASIC.equals(sheetType)) {
+		if (SheetType.BASIC.equals(sheetType)) {
 			sheetParser = new BasicSheetParser();
+		} else if (SheetType.HORIZONTAL.equals(sheetType)) {
+			sheetParser = new HorizontalSheetParser();
+		} else if (SheetType.VERTICAL.equals(sheetType)) {
+			sheetParser = new VerticalSheetParser();
 		} else if (SheetType.MIXED.equals(sheetType)) {
 			sheetParser = new MixedSheetParser();
 		}
