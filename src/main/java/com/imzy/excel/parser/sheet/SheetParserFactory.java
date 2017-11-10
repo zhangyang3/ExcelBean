@@ -18,8 +18,8 @@ public class SheetParserFactory {
 		SheetParser sheetParser = null;
 		if (SheetType.HORIZONTAL.equals(sheetType)) {
 			sheetParser = new HorizontalSheetParser();
-		} else if (SheetType.VERTICAL.equals(sheetType)) {
-			sheetParser = new VerticalSheetParser();
+		} else if (SheetType.BASIC.equals(sheetType)) {
+			sheetParser = new BasicSheetParser();
 		} else if (SheetType.MIXED.equals(sheetType)) {
 			sheetParser = new MixedSheetParser();
 		}

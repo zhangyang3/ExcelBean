@@ -18,7 +18,7 @@ import lombok.Data;
 @Excel(name = "test")
 public class ExcelBean {
 
-	@Sheet(name = "实施清单要素", type = SheetType.VERTICAL)
+	@Sheet(name = "实施清单要素", type = SheetType.BASIC)
 	private SsqdBasic ssqdBasic;
 
 	@Sheet(name = "附表1特别程序要素", type = SheetType.HORIZONTAL, startLine = 3, existProcessor = SimpleExistProcessor.class)

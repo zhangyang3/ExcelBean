@@ -23,7 +23,7 @@ import com.imzy.excel.util.BeanUtils;
  * @author yangzhang7
  *
  */
-public class MixedSheetParser extends VerticalSheetParser {
+public class MixedSheetParser extends BasicSheetParser {
 	private static Logger logger = LoggerFactory.getLogger(MixedSheetParser.class);
 
 	@Override

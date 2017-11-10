@@ -4,7 +4,7 @@
 		http://www.imzy.com/schema/excel.xsd">
 	
 	<excel name="default" class="com.imzy.excel.test.xmlbean.ExcelBean">
-		<sheet name="实施清单要素" type="VERTICAL" fieldName="ssqdBasic">
+		<sheet name="实施清单要素" type="BASIC" fieldName="ssqdBasic">
 			<cell startX="c" endX="d" startY="4" endY="4" fieldName="basicCode"/>
 			<cell startX="c" endX="d" startY="5" endY="5" fieldName="ssbm" mappingProcessor="com.imzy.excel.test.bean.processor.mapping.SxlxMappingProcess"/>
 			<cell startX="c" endX="d" startY="6" endY="6" fieldName="sxmc">

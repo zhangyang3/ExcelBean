@@ -12,12 +12,12 @@ import com.imzy.excel.enums.CellType;
 import com.imzy.excel.support.ConfigBeanHelper;
 
 /**
- * 垂直sheet解析器
+ * 一般sheet解析器
  * @author yangzhang7
  *
  */
-public class VerticalSheetParser extends BaseSheetParser {
-	private static Logger logger = LoggerFactory.getLogger(VerticalSheetParser.class);
+public class BasicSheetParser extends BaseSheetParser {
+	private static Logger logger = LoggerFactory.getLogger(BasicSheetParser.class);
 
 	@Override
 	public <T> T parse(Field field, Class<T> clazz) {

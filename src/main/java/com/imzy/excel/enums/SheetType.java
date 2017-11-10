@@ -6,6 +6,8 @@ package com.imzy.excel.enums;
  *
  */
 public enum SheetType {
+	/** 基本表*/
+	BASIC,
 	/** 竖表*/
 	VERTICAL,
 	/** 横表*/
