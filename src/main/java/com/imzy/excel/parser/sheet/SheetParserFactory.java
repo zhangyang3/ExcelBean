@@ -11,7 +11,6 @@ import com.imzy.excel.util.BeanUtils;
  * @author yangzhang7
  *
  */
-@SuppressWarnings("unchecked")
 public class SheetParserFactory {
 
 	private static Map<Class<?>, SheetParser> sheetParserMap = new HashMap<Class<?>, SheetParser>();
@@ -41,13 +40,13 @@ public class SheetParserFactory {
 	 * @param clazz sheet的class类型
 	 * @return
 	 */
-	public static <T> T getSheetParser(Class<T> clazz) {
+	public static SheetParser getSheetParser(Class<? extends SheetParser> clazz) {
 		SheetParser sheetParser = sheetParserMap.get(clazz);
 		if (null == sheetParser) {
-			sheetParser = (SheetParser) BeanUtils.getBean(clazz);
+			sheetParser = BeanUtils.getBean(clazz);
 			sheetParserMap.put(clazz, sheetParser);
 		}
 
-		return (T) sheetParser;
+		return sheetParser;
 	}
 }

@@ -24,7 +24,8 @@ import com.imzy.excel.util.BeanUtils;
 public class MixedSheetParser extends BaseSheetParser {
 	private static Logger logger = LoggerFactory.getLogger(MixedSheetParser.class);
 
-	private BasicSheetParser basicSheetParser = SheetParserFactory.getSheetParser(BasicSheetParser.class);
+	private BasicSheetParser basicSheetParser = (BasicSheetParser) SheetParserFactory
+			.getSheetParser(BasicSheetParser.class);
 
 	@Override
 	public <T> T parse(Field field, Class<T> clazz) {

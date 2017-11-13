@@ -19,7 +19,9 @@ import com.imzy.excel.parser.sheet.task.CommonTask;
 import com.imzy.excel.processer.ExistProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.ValidateProcessor;
+import com.imzy.excel.processer.exist.ExistProcessorFactory;
 import com.imzy.excel.processer.mapping.MappingProcessorFactory;
+import com.imzy.excel.processer.position.PositionProcessorFactory;
 import com.imzy.excel.processer.validator.ValidateProcessorFactory;
 import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.BeanUtils;
@@ -33,18 +35,148 @@ import com.imzy.excel.util.SheetUtils;
 public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	private static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);
 
+	@Override
+	public boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
+			Class<? extends ExistProcessor> existProcessorClass, Point point, String value, String[][] regionValue) {
+		if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
+			ExistProcessor existProcessor = ExistProcessorFactory.getExistProcessor(existProcessorClass);
+			return existProcessor.exist(cellConfigBeanList, cellConfigBean, point, regionValue, value);
+		}
+
+		return false;
+	}
+
+	@Override
+	public void doValidate(CellConfigBean cellConfigBean, String value) throws ValidateExcelException {
+		List<ValidatorConfigBean> validatorBeanConfigList = cellConfigBean.getValidatorConfigBeanList();
+
+		if (CollectionUtils.isNotEmpty(validatorBeanConfigList)) {
+			for (ValidatorConfigBean validatorConfigBean : validatorBeanConfigList) {
+				// 校验器class类型
+				Class<? extends ValidateProcessor> validatorClass = validatorConfigBean.getType();
+				// 校验器参数
+				String param = validatorConfigBean.getParam();
+
+				if (!ValidateProcessorFactory.getValidatorProcessor(validatorClass).validate(value, param)) {
+					throw new ValidateExcelException(value + "不通过" + validatorClass);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 获取结束x坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private Character getEndX(CellConfigBean cellConfigBean) {
+		Character endX = cellConfigBean.getEndX();
+
+		Class<? extends PositionProcessor> positionProcesserClass = cellConfigBean.getPositionProcessor();
+		if (null != positionProcesserClass && !PositionProcessor.class.equals(positionProcesserClass)) {
+			PositionProcessor positionProcesser = PositionProcessorFactory.getPositionProcessor(positionProcesserClass);
+			endX = positionProcesser.getEndX(ThreadLocalHelper.getCurrentSheet());
+		}
+
+		return endX;
+	}
+
+	/**
+	 * 获取结束y坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private Integer getEndY(CellConfigBean cellConfigBean) {
+		Integer endY = cellConfigBean.getEndY();
+
+		Class<? extends PositionProcessor> positionProcesserClass = cellConfigBean.getPositionProcessor();
+		if (null != positionProcesserClass && !PositionProcessor.class.equals(positionProcesserClass)) {
+			PositionProcessor positionProcesser = PositionProcessorFactory.getPositionProcessor(positionProcesserClass);
+			endY = positionProcesser.getEndY(ThreadLocalHelper.getCurrentSheet());
+		}
+
+		return endY;
+	}
+
+	/**
+	 * 获取坐标
+	 * @param cellConfigBean
+	 * @param y y坐标
+	 * @param x x坐标
+	 * @return
+	 */
+	private Point getPoint(CellConfigBean cellConfigBean, Integer y, Character x) {
+		Character startX = 0, endX = 0;
+		Integer startY = -1, endY = -1;
+
+		if (null == x) {
+			startX = getStartX(cellConfigBean);
+			endX = getEndX(cellConfigBean);
+		} else {
+			startX = x;
+			endX = x;
+		}
+		if (null == y) {
+			startY = getStartY(cellConfigBean);
+			endY = getEndY(cellConfigBean);
+		} else {
+			startY = y;
+			endY = y;
+		}
+
+		Point point = new Point(startX, startY, endX, endY);
+		if (logger.isDebugEnabled()) {
+			logger.debug(JSONObject.toJSONString(point));
+		}
+		return point;
+	}
+
+	/**
+	 * 获取开始x坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private Character getStartX(CellConfigBean cellConfigBean) {
+		Character startX = cellConfigBean.getStartX();
+
+		Class<? extends PositionProcessor> positionProcesserClass = cellConfigBean.getPositionProcessor();
+		if (null != positionProcesserClass && !PositionProcessor.class.equals(positionProcesserClass)) {
+			PositionProcessor positionProcesser = PositionProcessorFactory.getPositionProcessor(positionProcesserClass);
+			startX = positionProcesser.getStartX(ThreadLocalHelper.getCurrentSheet());
+		}
+
+		return startX;
+	}
+
+	/**
+	 * 获取开始y坐标
+	 * @param cellConfigBean
+	 * @return
+	 */
+	private Integer getStartY(CellConfigBean cellConfigBean) {
+		Integer startY = cellConfigBean.getStartY();
+
+		Class<? extends PositionProcessor> positionProcesserClass = cellConfigBean.getPositionProcessor();
+		if (null != positionProcesserClass && !PositionProcessor.class.equals(positionProcesserClass)) {
+			PositionProcessor positionProcesser = PositionProcessorFactory.getPositionProcessor(positionProcesserClass);
+			startY = positionProcesser.getStartY(ThreadLocalHelper.getCurrentSheet());
+		}
+
+		return startY;
+	}
+
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singValueCellConfigBeanList) {
 		return buildBean(clazz, singValueCellConfigBeanList, null, null, null);
 	}
 
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Integer y) {
-		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, y, null);
+			Class<? extends ExistProcessor> existProcessorClass, Character x) {
+		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, null, x);
 	}
 
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Character x) {
-		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, null, x);
+			Class<? extends ExistProcessor> existProcessorClass, Integer y) {
+		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, y, null);
 	}
 
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
@@ -93,114 +225,6 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			}
 		}
 		return newInstance;
-	}
-
-	@Override
-	public boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
-			Class<? extends ExistProcessor> existProcessorClass, Point point, String value, String[][] regionValue) {
-		if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
-			ExistProcessor existProcessor = BeanUtils.getBean(existProcessorClass);
-
-			return existProcessor.exist(cellConfigBeanList, cellConfigBean, point, regionValue, value);
-		}
-
-		return false;
-	}
-
-	@Override
-	public void doValidate(CellConfigBean cellConfigBean, String value) throws ValidateExcelException {
-		List<ValidatorConfigBean> validatorBeanConfigList = cellConfigBean.getValidatorConfigBeanList();
-
-		if (CollectionUtils.isNotEmpty(validatorBeanConfigList)) {
-			for (ValidatorConfigBean validatorConfigBean : validatorBeanConfigList) {
-				// 校验器class类型
-				Class<? extends ValidateProcessor> validatorClass = validatorConfigBean.getType();
-				// 校验器参数
-				String param = validatorConfigBean.getParam();
-
-				if (!ValidateProcessorFactory.buildValidator(validatorClass).validate(value, param)) {
-					throw new ValidateExcelException(value + "不通过" + validatorClass);
-				}
-			}
-		}
-	}
-
-	/**
-	 * 获取结束x坐标
-	 * @param cellConfigBean
-	 * @return
-	 */
-	private Character getEndX(CellConfigBean cellConfigBean) {
-		Character endX = cellConfigBean.getEndX();
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
-		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
-			try {
-				PositionProcessor newInstance = positionProcesser.newInstance();
-				endX = newInstance.getEndX(ThreadLocalHelper.getCurrentSheet());
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return endX;
-	}
-
-	/**
-	 * 获取结束y坐标
-	 * @param cellConfigBean
-	 * @return
-	 */
-	private Integer getEndY(CellConfigBean cellConfigBean) {
-		Integer endY = cellConfigBean.getEndY();
-
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
-		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
-			try {
-				PositionProcessor newInstance = positionProcesser.newInstance();
-				endY = newInstance.getEndY(ThreadLocalHelper.getCurrentSheet());
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return endY;
-	}
-
-	/**
-	 * 获取坐标
-	 * @param cellConfigBean
-	 * @param y y坐标
-	 * @param x x坐标
-	 * @return
-	 */
-	protected Point getPoint(CellConfigBean cellConfigBean, Integer y, Character x) {
-		Character startX = 0, endX = 0;
-		Integer startY = -1, endY = -1;
-
-		if (null == x) {
-			startX = getStartX(cellConfigBean);
-			endX = getEndX(cellConfigBean);
-		} else {
-			startX = x;
-			endX = x;
-		}
-		if (null == y) {
-			startY = getStartY(cellConfigBean);
-			endY = getEndY(cellConfigBean);
-		} else {
-			startY = y;
-			endY = y;
-		}
-
-		Point point = new Point(startX, startY, endX, endY);
-		if (logger.isDebugEnabled()) {
-			logger.debug(JSONObject.toJSONString(point));
-		}
-		return point;
 	}
 
 	protected String[][] getRegionValue(CellConfigBean cellConfigBean) {
@@ -262,53 +286,6 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		}
 
 		return result;
-	}
-
-	/**
-	 * 获取开始x坐标
-	 * @param cellConfigBean
-	 * @return
-	 */
-	private Character getStartX(CellConfigBean cellConfigBean) {
-		Character startX = cellConfigBean.getStartX();
-
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
-		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
-			try {
-				PositionProcessor newInstance = positionProcesser.newInstance();
-
-				startX = newInstance.getStartX(ThreadLocalHelper.getCurrentSheet());
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return startX;
-	}
-
-	/**
-	 * 获取开始y坐标
-	 * @param cellConfigBean
-	 * @return
-	 */
-	private Integer getStartY(CellConfigBean cellConfigBean) {
-		Integer startY = cellConfigBean.getStartY();
-
-		Class<? extends PositionProcessor> positionProcesser = cellConfigBean.getPositionProcessor();
-		if (null != positionProcesser && !PositionProcessor.class.equals(positionProcesser)) {
-			try {
-				PositionProcessor newInstance = positionProcesser.newInstance();
-				startY = newInstance.getStartY(ThreadLocalHelper.getCurrentSheet());
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return startY;
 	}
 
 }
