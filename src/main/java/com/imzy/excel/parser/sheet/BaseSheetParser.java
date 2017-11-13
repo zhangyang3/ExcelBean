@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +33,23 @@ import com.imzy.excel.util.SheetUtils;
 public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	private static Logger logger = LoggerFactory.getLogger(ExcelImporter.class);
 
-	/**
-	 * 构建bean
-	 * @param clazz 待构建bean的类型
-	 * @param singleValueCellConfigBeanList 待构建bean中的cell配置列表
-	 * @return bean
-	 */
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singValueCellConfigBeanList) {
 		return buildBean(clazz, singValueCellConfigBeanList, null, null, null);
+	}
+
+	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
+			Class<? extends ExistProcessor> existProcessorClass, Integer y) {
+		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, y, null);
+	}
+
+	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
+			Class<? extends ExistProcessor> existProcessorClass, Character x) {
+		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, null, x);
+	}
+
+	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
+			Class<? extends ExistProcessor> existProcessorClass, Integer y, Character x) {
+		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, y, x, null);
 	}
 
 	/**
@@ -51,19 +59,20 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param sheetConfigBean 带构建bean的sheet配置
 	 * @param y y坐标
 	 * @param x x坐标
+	 * @param filterRegionValue 待筛选的区域值
 	 * @return bean
 	 */
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Integer y, Character x) {
+			Class<? extends ExistProcessor> existProcessorClass, Integer y, Character x, String[][] filterRegionValue) {
 
-		// 反射一个bean
+		// 1.构建空对象
 		T newInstance = BeanUtils.getBean(clazz);
-
+		// 2.往空对象塞值
 		for (CellConfigBean cellConfigBean : singleValueCellConfigBeanList) {
 			// 获取坐标点
 			Point point = getPoint(cellConfigBean, y, x);
 			// 获取区域值
-			String[][] regionValue = getRegionValue(point);
+			String[][] regionValue = getRegionValue(point, filterRegionValue);
 
 			// 获取映射值
 			String value = MappingProcessorFactory.buildMappingProcessor(cellConfigBean.getMappingProcessor())
@@ -78,7 +87,6 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 
 			try {
 				Field cellField = clazz.getDeclaredField(cellConfigBean.getFieldName());
-
 				BeanUtils.setValue(newInstance, cellField, value);
 			} catch (Exception e) {
 				throw new ExcelException(e.getMessage(), e);
@@ -195,43 +203,29 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		return point;
 	}
 
-	/**
-	 * 获取区域值
-	 * @param cellConfigBean 配置数据
-	 * @param y y坐标
-	 * @return 区域值
-	 */
+	protected String[][] getRegionValue(CellConfigBean cellConfigBean) {
+		return getRegionValue(cellConfigBean, null);
+	}
+
 	protected String[][] getRegionValue(CellConfigBean cellConfigBean, Integer y) {
-		Point point = getPoint(cellConfigBean, y, null);
-		return getRegionValue(point);
+		return getRegionValue(cellConfigBean, y, null);
+	}
+
+	protected String[][] getRegionValue(CellConfigBean cellConfigBean, Integer y, Character x) {
+		return getRegionValue(cellConfigBean, y, x, null);
 	}
 
 	/**
 	 * 获取区域值
-	 * @param point 坐标点
+	 * @param cellConfigBean 配置数据
+	 * @param y y坐标
+	 * @param x x坐标
+	 * @param regionValue 待筛选的区域值
 	 * @return 区域值
 	 */
-	protected String[][] getRegionValue(Point point) {
-		// 初始化参数
-		char startX = point.getStartX();
-		char endX = point.getEndX();
-		int startY = point.getStartY();
-		int endY = point.getEndY();
-		Sheet currentSheet = ThreadLocalHelper.getCurrentSheet();
-
-		int arrayY = endY - startY + 1;
-		int arrayX = Character.toLowerCase(endX) - Character.toLowerCase(startX) + 1;
-		String[][] result = new String[arrayY][arrayX];
-
-		for (int i = 0; i < arrayY; i++) {
-			Row row = currentSheet.getRow(Character.toLowerCase(startY) - 1 + i);
-			for (int j = 0; j < arrayX; j++) {
-				org.apache.poi.ss.usermodel.Cell cell = row.getCell(Character.toLowerCase(startX) - 'a' + j);
-				result[i][j] = SheetUtils.getCellValue(cell);
-			}
-		}
-
-		return result;
+	protected String[][] getRegionValue(CellConfigBean cellConfigBean, Integer y, Character x, String[][] regionValue) {
+		Point point = getPoint(cellConfigBean, y, x);
+		return getRegionValue(point, regionValue);
 	}
 
 	/**
@@ -252,9 +246,18 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		String[][] result = new String[arrayY][arrayX];
 
 		for (int i = 0; i < arrayY; i++) {
-			String[] row = regionValue[Character.toLowerCase(startY) - 1 + i];
-			for (int j = 0; j < arrayX; j++) {
-				result[i][j] = row[Character.toLowerCase(startX) - 'a' + j];
+			// 如果待筛选区域值为null，则从当前sheet页取
+			if (regionValue == null) {
+				Row row = ThreadLocalHelper.getCurrentSheet().getRow(Character.toLowerCase(startY) - 1 + i);
+				for (int j = 0; j < arrayX; j++) {
+					org.apache.poi.ss.usermodel.Cell cell = row.getCell(Character.toLowerCase(startX) - 'a' + j);
+					result[i][j] = SheetUtils.getCellValue(cell);
+				}
+			} else {
+				String[] row = regionValue[Character.toLowerCase(startY) - 1 + i];
+				for (int j = 0; j < arrayX; j++) {
+					result[i][j] = row[Character.toLowerCase(startX) - 'a' + j];
+				}
 			}
 		}
 

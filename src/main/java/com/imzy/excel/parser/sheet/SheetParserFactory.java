@@ -1,31 +1,53 @@
 package com.imzy.excel.parser.sheet;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.imzy.excel.enums.SheetType;
+import com.imzy.excel.util.BeanUtils;
 
 /**
  * sheet解析器工厂
  * @author yangzhang7
  *
  */
+@SuppressWarnings("unchecked")
 public class SheetParserFactory {
 
+	private static Map<Class<?>, SheetParser> sheetParserMap = new HashMap<Class<?>, SheetParser>();
+
 	/**
-	 * 构建sheet解析器
+	 * 获取sheet解析器
 	 * @param sheetType sheet类型
 	 * @return
 	 */
-	public static SheetParser buildSheetParser(SheetType sheetType) {
-		SheetParser sheetParser = null;
+	public static SheetParser getSheetParser(SheetType sheetType) {
+		Class<? extends SheetParser> sheetParserClazz = null;
 		if (SheetType.BASIC.equals(sheetType)) {
-			sheetParser = new BasicSheetParser();
+			sheetParserClazz = BasicSheetParser.class;
 		} else if (SheetType.HORIZONTAL.equals(sheetType)) {
-			sheetParser = new HorizontalSheetParser();
+			sheetParserClazz = HorizontalSheetParser.class;
 		} else if (SheetType.VERTICAL.equals(sheetType)) {
-			sheetParser = new VerticalSheetParser();
+			sheetParserClazz = VerticalSheetParser.class;
 		} else if (SheetType.MIXED.equals(sheetType)) {
-			sheetParser = new MixedSheetParser();
+			sheetParserClazz = MixedSheetParser.class;
 		}
 
-		return sheetParser;
+		return getSheetParser(sheetParserClazz);
+	}
+
+	/**
+	 * 获取sheet解析器
+	 * @param clazz sheet的class类型
+	 * @return
+	 */
+	public static <T> T getSheetParser(Class<T> clazz) {
+		SheetParser sheetParser = sheetParserMap.get(clazz);
+		if (null == sheetParser) {
+			sheetParser = (SheetParser) BeanUtils.getBean(clazz);
+			sheetParserMap.put(clazz, sheetParser);
+		}
+
+		return (T) sheetParser;
 	}
 }

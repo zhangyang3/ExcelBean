@@ -72,7 +72,7 @@ public class HorizontalSheetParser extends BaseSheetParser {
 		// 获取excel的配置
 		SheetConfigBean sheetConfigBean = ConfigBeanHelper.getSheetConfigBean(field.getName());
 
-		T buildBean = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor(), y, null);
+		T buildBean = buildBean(clazz, singValueCellConfigBeanList, sheetConfigBean.getExistProcessor(), y);
 
 		return buildBean;
 	}

@@ -39,7 +39,7 @@ public class ExcelParser {
 				Field excelFiled = excelClazz.getDeclaredField(sheetConfigBean.getFieldName());
 
 				// 获取具体的sheet处理器
-				SheetParser sheetParser = SheetParserFactory.buildSheetParser(sheetType);
+				SheetParser sheetParser = SheetParserFactory.getSheetParser(sheetType);
 				if (null == sheetParser) {
 					throw new ExcelException(excelClazz.getName() + "字段" + excelFiled.getName() + "不支持");
 				}
