@@ -1,9 +1,8 @@
 package com.imzy.excel.processer.mapping;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -12,15 +11,14 @@ import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.SheetUtils;
 
 /**
- * 抽象多选框映射处理器
+ * 抽象单选框映射处理器
  * @author yangzhang7
  *
  */
-public abstract class AbstractCheckboxMappingProcessor implements MappingProcessor {
+public abstract class AbstractRadioboxMappingProcessor implements MappingProcessor {
 
 	/**
 	 * 设置映射字典值<br>
-	 * key为A-1，value为字典值
 	 * @return
 	 */
 	protected abstract Map<String, String> initMapping();
@@ -31,29 +29,24 @@ public abstract class AbstractCheckboxMappingProcessor implements MappingProcess
 	 */
 	protected abstract String initMappingSheetName();
 
+	/**
+	 * 获取单选框坐标
+	 * @return
+	 */
+	protected abstract Pair<String, String> getPosition();
+
 	@Override
 	public String mappingValue(String[][] regionValue) {
-		StringBuilder result = new StringBuilder(100);
-
 		Map<String, String> initMapping = initMapping();
 		String initMappingSheetName = initMappingSheetName();
 
 		Workbook currentWorkbook = ThreadLocalHelper.getCurrentWorkbook();
 		Sheet sheet = currentWorkbook.getSheet(initMappingSheetName);
 
-		for (Entry<String, String> entry : initMapping.entrySet()) {
-			String key = entry.getKey();
-			String[] split = key.split("-");
-			String value = SheetUtils.getCellValue(sheet, split[0], split[1]);
-			if (StringUtils.equalsIgnoreCase("TRUE", value)) {
-				result.append(entry.getValue()).append(",");
-			}
-		}
-		if (result.length() > 0) {
-			return result.substring(0, result.length() - 1);
-		} else {
-			return StringUtils.EMPTY;
-		}
+		String value = SheetUtils.getCellValue(sheet, getPosition().getLeft(), getPosition().getRight());
+
+		return initMapping.get(value);
+
 	}
 
 }

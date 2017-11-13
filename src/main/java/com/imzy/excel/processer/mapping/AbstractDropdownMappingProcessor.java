@@ -2,6 +2,8 @@ package com.imzy.excel.processer.mapping;
 
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 抽象下拉框映射处理器
  * @author yangzhang7
@@ -11,7 +13,6 @@ public abstract class AbstractDropdownMappingProcessor extends SingleStringMappi
 
 	/**
 	 * 设置映射字典值<br>
-	 * key为A-1，value为字典值
 	 * @return
 	 */
 	protected abstract Map<String, String> initMapping();
@@ -22,6 +23,10 @@ public abstract class AbstractDropdownMappingProcessor extends SingleStringMappi
 
 		Map<String, String> initMapping = initMapping();
 
-		return initMapping.get(mappingValue);
+		if (initMapping.containsKey(mappingValue)) {
+			return initMapping.get(mappingValue);
+		} else {
+			return StringUtils.EMPTY;
+		}
 	}
 }
