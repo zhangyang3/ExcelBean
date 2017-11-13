@@ -37,7 +37,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 
 	@Override
 	public boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
-			Class<? extends ExistProcessor> existProcessorClass, Point point, String value, String[][] regionValue) {
+			Class<? extends ExistProcessor> existProcessorClass, ExcelPoint point, String value, String[][] regionValue) {
 		if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
 			ExistProcessor existProcessor = ExistProcessorFactory.getExistProcessor(existProcessorClass);
 			return existProcessor.exist(cellConfigBeanList, cellConfigBean, point, regionValue, value);
@@ -105,7 +105,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param x x坐标
 	 * @return
 	 */
-	private Point getPoint(CellConfigBean cellConfigBean, Integer y, Character x) {
+	private ExcelPoint getPoint(CellConfigBean cellConfigBean, Integer y, Character x) {
 		Character startX = 0, endX = 0;
 		Integer startY = -1, endY = -1;
 
@@ -124,7 +124,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			endY = y;
 		}
 
-		Point point = new Point(startX, startY, endX, endY);
+		ExcelPoint point = new ExcelPoint(startX, startY, endX, endY);
 		if (logger.isDebugEnabled()) {
 			logger.debug(JSONObject.toJSONString(point));
 		}
@@ -202,7 +202,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		// 2.往空对象塞值
 		for (CellConfigBean cellConfigBean : singleValueCellConfigBeanList) {
 			// 获取坐标点
-			Point point = getPoint(cellConfigBean, y, x);
+			ExcelPoint point = getPoint(cellConfigBean, y, x);
 			// 获取区域值
 			String[][] regionValue = getRegionValue(point, filterRegionValue);
 
@@ -248,7 +248,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @return 区域值
 	 */
 	protected String[][] getRegionValue(CellConfigBean cellConfigBean, Integer y, Character x, String[][] regionValue) {
-		Point point = getPoint(cellConfigBean, y, x);
+		ExcelPoint point = getPoint(cellConfigBean, y, x);
 		return getRegionValue(point, regionValue);
 	}
 
@@ -258,7 +258,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @param regionValue 待筛选的区域值
 	 * @return 区域值
 	 */
-	protected String[][] getRegionValue(Point point, String[][] regionValue) {
+	protected String[][] getRegionValue(ExcelPoint point, String[][] regionValue) {
 		// 初始化参数
 		char startX = point.getStartX();
 		char endX = point.getEndX();

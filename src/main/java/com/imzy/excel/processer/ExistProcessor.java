@@ -3,7 +3,7 @@ package com.imzy.excel.processer;
 import java.util.List;
 
 import com.imzy.excel.configbean.CellConfigBean;
-import com.imzy.excel.parser.sheet.Point;
+import com.imzy.excel.parser.sheet.ExcelPoint;
 
 /**
  * 退出处理器
@@ -21,7 +21,7 @@ public interface ExistProcessor {
 	 * @param value 当前单元格值
 	 * @return
 	 */
-	boolean exist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean, Point point,
+	boolean exist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean, ExcelPoint point,
 			String[][] regionValue, String value);
 
 }

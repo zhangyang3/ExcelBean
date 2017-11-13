@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Point {
+public class ExcelPoint {
 
 	private Character startX;
 

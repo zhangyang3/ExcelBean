@@ -3,7 +3,7 @@ package com.imzy.excel.parser.sheet.task;
 import java.util.List;
 
 import com.imzy.excel.configbean.CellConfigBean;
-import com.imzy.excel.parser.sheet.Point;
+import com.imzy.excel.parser.sheet.ExcelPoint;
 import com.imzy.excel.processer.ExistProcessor;
 
 /**
@@ -24,6 +24,6 @@ public interface ExistTask {
 	 * @return 
 	 */
 	boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
-			Class<? extends ExistProcessor> existProcessorClass, Point point, String value, String[][] regionValue);
+			Class<? extends ExistProcessor> existProcessorClass, ExcelPoint point, String value, String[][] regionValue);
 
 }

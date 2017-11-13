@@ -6,7 +6,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.imzy.excel.configbean.CellConfigBean;
-import com.imzy.excel.parser.sheet.Point;
+import com.imzy.excel.parser.sheet.ExcelPoint;
 import com.imzy.excel.processer.ExistProcessor;
 
 /**
@@ -37,7 +37,7 @@ public class SimpleVerticalExistProcessor implements ExistProcessor {
 	}
 
 	@Override
-	public boolean exist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean, Point point,
+	public boolean exist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean, ExcelPoint point,
 			String[][] regionValue, String value) {
 		Integer minY = getMinY(cellConfigBeanList);
 
