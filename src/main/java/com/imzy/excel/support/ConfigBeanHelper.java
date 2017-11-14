@@ -2,13 +2,12 @@ package com.imzy.excel.support;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.Predicate;
-
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.enums.CellType;
+import com.imzy.excel.util.CollectionUtils;
+import com.imzy.excel.util.CollectionUtils.Predicate;
 import com.imzy.excel.util.StringUtils;
 
 /**

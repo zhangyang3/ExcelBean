@@ -3,7 +3,6 @@ package com.imzy.excel.parser.sheet;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +24,7 @@ import com.imzy.excel.processer.position.PositionProcessorFactory;
 import com.imzy.excel.processer.validator.ValidateProcessorFactory;
 import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.BeanUtils;
+import com.imzy.excel.util.CollectionUtils;
 import com.imzy.excel.util.SheetUtils;
 
 /**
@@ -37,7 +37,8 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 
 	@Override
 	public boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
-			Class<? extends ExistProcessor> existProcessorClass, ExcelPoint point, String value, String[][] regionValue) {
+			Class<? extends ExistProcessor> existProcessorClass, ExcelPoint point, String value,
+			String[][] regionValue) {
 		if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
 			ExistProcessor existProcessor = ExistProcessorFactory.getExistProcessor(existProcessorClass);
 			return existProcessor.exist(cellConfigBeanList, cellConfigBean, point, regionValue, value);

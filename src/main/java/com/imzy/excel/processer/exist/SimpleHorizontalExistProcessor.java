@@ -2,11 +2,10 @@ package com.imzy.excel.processer.exist;
 
 import java.util.List;
 
-import org.apache.commons.collections.CollectionUtils;
-
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.parser.sheet.ExcelPoint;
 import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.util.CollectionUtils;
 import com.imzy.excel.util.StringUtils;
 
 /**
