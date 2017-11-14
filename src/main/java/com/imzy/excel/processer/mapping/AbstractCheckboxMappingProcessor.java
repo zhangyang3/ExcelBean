@@ -3,13 +3,13 @@ package com.imzy.excel.processer.mapping;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.SheetUtils;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * 抽象多选框映射处理器

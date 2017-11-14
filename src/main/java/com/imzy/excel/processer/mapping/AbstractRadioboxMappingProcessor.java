@@ -1,8 +1,8 @@
 package com.imzy.excel.processer.mapping;
 
 import java.util.Map;
+import java.util.Map.Entry;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
@@ -33,7 +33,7 @@ public abstract class AbstractRadioboxMappingProcessor implements MappingProcess
 	 * 获取单选框坐标
 	 * @return
 	 */
-	protected abstract Pair<String, String> getPosition();
+	protected abstract Entry<String, String> getPosition();
 
 	@Override
 	public String mappingValue(String[][] regionValue) {
@@ -43,7 +43,7 @@ public abstract class AbstractRadioboxMappingProcessor implements MappingProcess
 		Workbook currentWorkbook = ThreadLocalHelper.getCurrentWorkbook();
 		Sheet sheet = currentWorkbook.getSheet(initMappingSheetName);
 
-		String value = SheetUtils.getCellValue(sheet, getPosition().getLeft(), getPosition().getRight());
+		String value = SheetUtils.getCellValue(sheet, getPosition().getKey(), getPosition().getValue());
 
 		return initMapping.get(value);
 

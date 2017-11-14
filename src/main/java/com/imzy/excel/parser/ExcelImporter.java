@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -18,6 +17,7 @@ import com.imzy.excel.parser.config.AnnotationConfigParser;
 import com.imzy.excel.parser.config.XmlConfigParser;
 import com.imzy.excel.support.ExcelBeanConst.Suffix;
 import com.imzy.excel.support.ThreadLocalHelper;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * excel导入器
@@ -42,7 +42,7 @@ public class ExcelImporter {
 	 * @param clazz annotation方式下，待解析的class
 	 */
 	public void initConfigBean(String configPath, Class<?> clazz) {
-		if (StringUtils.isNoneBlank(configPath)) {
+		if (StringUtils.isNotBlank(configPath)) {
 			XmlConfigParser.getInstance().parse(configPath);
 		}
 		if (null != clazz) {

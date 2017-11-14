@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.commons.lang3.StringUtils;
 
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.enums.CellType;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * 配置bean帮助类

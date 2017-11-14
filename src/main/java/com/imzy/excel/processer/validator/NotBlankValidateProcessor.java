@@ -1,8 +1,7 @@
 package com.imzy.excel.processer.validator;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.imzy.excel.processer.ValidateProcessor;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * 非空校验器

@@ -1,8 +1,7 @@
 package com.imzy.excel.processer.mapping;
 
-import org.apache.commons.lang3.StringUtils;
-
 import com.imzy.excel.processer.MappingProcessor;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * 简单字符串映射器

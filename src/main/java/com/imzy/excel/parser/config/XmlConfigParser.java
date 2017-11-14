@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -25,6 +24,7 @@ import com.imzy.excel.processer.mapping.SingleStringMappingProcessor;
 import com.imzy.excel.support.ExcelBeanConst.XmlFile.Attribute;
 import com.imzy.excel.support.ExcelBeanConst.XmlFile.Node;
 import com.imzy.excel.support.ThreadLocalHelper;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * xml配置解析器
