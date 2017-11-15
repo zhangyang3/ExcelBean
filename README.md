@@ -1,19 +1,19 @@
-## 来源
+## 1.来源
 关于为什么会有ExcelBean工具包，先看看正常情况我们是如何处理一份Excel的导入。<br>
 #### 正常逻辑
 1. Excel转为BusinessBean。
 2. 清洗或补充BusinessBean。
 3. 将BusinessBeean导入数据库中，并完成其他业务逻辑或者回滚。
-4. 如果有多份Excel，则重复执行步骤1到步骤3。
+4. 如果有多份Excel，则重复执行步骤1到步骤3。<br>
 *缺点：Excel直接转为BusinessBean，这将导入的过程和业务强耦合。一旦业务发生变化，操作Excel也发生变化。*
 *解决方案：在Excel和BusinessBean加一个ExcelBean。*
 #### 优化后逻辑
 1. Excel转为ExcelBean。
 2. ExcelBean转为BusinessBean，同时完成清洗或补充。
 3. 将BusinessBeean导入数据库中，并完成其他业务逻辑或者回滚。
-4. 如果有多份Excel，则重复执行步骤1到步骤3。
+4. 如果有多份Excel，则重复执行步骤1到步骤3。<br>
 *优点：一旦业务造成BusinessBean发生变化，只需要在清洗或补充BusinessBean时处理即可。*
-## 表类型
+## 2.表类型
 ExcelBean将表类型分别四中，分别是：基本表，横表，竖表，混合表。
 #### 基本表
 Sheet中字段只包含简单的单值字段。一般对应一个bean中值只包含简单的String类型。
@@ -23,7 +23,7 @@ Sheet中每一行的值都符合相同的类型。一般对应一个list，list�
 Sheet中每一列的值都符合相同的类型。一般对应一个list，list中每个对象只包含简单的String类型。
 #### 混合表
 Sheet中存在多种表类型，可包括基本表，横表，竖表。
-## 解析模式
+## 3.解析模式
 ExcelBean一共包含两种解析模式，分别是xml模式和annotation模式。
 ### annotation模式
 该模式下，主要使用四个注解。
@@ -90,7 +90,7 @@ public @interface Validator {
 **param**为校验器的参数。
 ### xml模式
 待补充
-## 处理器
+## 4.处理器
 工具包中包含了```ExistProcessor```，```MappingProcessor```，```PositionProcessor```，```ValidateProcessor```，共四大类处理器。
 ### ExistProcessor退出处理器
 退出处理器是在横表或竖表的情况下使用，用于识别当前行或列是否结束。<br>
@@ -103,9 +103,9 @@ public @interface Validator {
 ### ValidateProcessor校验处理器
 校验处理器用于处理单元格值校验。
 工具包提供：```NotBlankValidateProcessor```非空校验器，```RegularValidateProcessor```正则校验器。
-## 进阶：框架的基本解析流程
+## 5.进阶：框架的基本解析流程
 待补充
-## 进阶：框架的扩展点
+## 6.进阶：框架的扩展点
 待补充
-## 未完成的任务
-待补充
+## 7.未完成的任务
+1. 暂不支持CellType为MIXED模式。
