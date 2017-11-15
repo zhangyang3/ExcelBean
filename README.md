@@ -5,7 +5,6 @@
 2. 清洗或补充BusinessBean。
 3. 将BusinessBeean导入数据库中，并完成其他业务逻辑或者回滚。
 4. 如果有多份Excel，则重复执行步骤1到步骤3。
-<br>
 *缺点：Excel直接转为BusinessBean，这将导入的过程和业务强耦合。一旦业务发生变化，操作Excel也发生变化。*
 *解决方案：在Excel和BusinessBean加一个ExcelBean。*
 #### 优化后逻辑
@@ -13,7 +12,6 @@
 2. ExcelBean转为BusinessBean，同时完成清洗或补充。
 3. 将BusinessBeean导入数据库中，并完成其他业务逻辑或者回滚。
 4. 如果有多份Excel，则重复执行步骤1到步骤3。
-<br>
 *优点：一旦业务造成BusinessBean发生变化，只需要在清洗或补充BusinessBean时处理即可。*
 ## 表类型
 ExcelBean将表类型分别四中，分别是：基本表，横表，竖表，混合表。
