@@ -15,8 +15,9 @@ import com.imzy.excel.processer.ValidateProcessor;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Validator {
-
+	/** 校验器类型 **/
 	Class<? extends ValidateProcessor> type();
 
+	/** 校验器参数 */
 	String param() default "";
 }

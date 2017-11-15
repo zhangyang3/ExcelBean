@@ -9,7 +9,7 @@ import com.imzy.excel.util.CollectionUtils;
 import com.imzy.excel.util.StringUtils;
 
 /**
- * 简单退出处理器
+ * 简单横表退出处理器
  * @author yangzhang7
  *
  */
