@@ -102,7 +102,13 @@ public @interface Validator {
 待补充
 ### ValidateProcessor校验处理器
 校验处理器用于处理单元格值校验。
-工具包提供：```NotBlankValidateProcessor```非空校验器，```RegularValidateProcessor```正则校验器。
+工具包提供：<br>
+1. ```NotBlankValidateProcessor```非空校验器
+2. ```RegularValidateProcessor```正则校验器
+3. ```EmailValidatorProcessor```邮箱校验器
+4. ```IdCardValidatorProcessor```身份证校验器
+5. ```PhoneValidatorProcessor```电话校验器
+6. ```PostCodeValidatorProcessor```邮编校验器
 ## 5.进阶：框架的基本解析流程
 待补充
 ## 6.进阶：框架的扩展点
