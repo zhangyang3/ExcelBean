@@ -119,3 +119,4 @@ public @interface Validator {
 1. 暂不支持CellType为MIXED模式。
 ## 8.其他
 1. ExcelBean需要IDE支持lombok功能。
+2. ExcelException中errorBean存放当前错误信息。
