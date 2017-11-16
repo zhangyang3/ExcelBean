@@ -4,46 +4,37 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+/**
+ * 集合工具
+ * @author yangzhang7
+ *
+ */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class CollectionUtils {
 
 	/**
-	 * Null-safe check if the specified collection is not empty.
-	 * <p>
-	 * Null returns false.
-	 * 
-	 * @param coll  the collection to check, may be null
-	 * @return true if non-null and non-empty
-	 * @since Commons Collections 3.2
+	 * 不为空
+	 * @param coll
+	 * @return
 	 */
 	public static boolean isNotEmpty(Collection coll) {
 		return !CollectionUtils.isEmpty(coll);
 	}
 
-	// -----------------------------------------------------------------------
 	/**
-	 * Null-safe check if the specified collection is empty.
-	 * <p>
-	 * Null returns true.
-	 * 
-	 * @param coll  the collection to check, may be null
-	 * @return true if empty or null
-	 * @since Commons Collections 3.2
+	 * 为空
+	 * @param coll
+	 * @return
 	 */
 	public static boolean isEmpty(Collection coll) {
 		return (coll == null || coll.isEmpty());
 	}
 
-	/** 
-	 * Selects all elements from input collection which match the given predicate
-	 * into an output collection.
-	 * <p>
-	 * A <code>null</code> predicate matches no elements.
-	 * 
-	 * @param inputCollection  the collection to get the input from, may not be null
-	 * @param predicate  the predicate to use, may be null
-	 * @return the elements matching the predicate (new list)
-	 * @throws NullPointerException if the input collection is null
+	/**
+	 * 筛选元素
+	 * @param inputCollection
+	 * @param predicate
+	 * @return
 	 */
 	public static Collection select(Collection inputCollection, Predicate predicate) {
 		ArrayList answer = new ArrayList(inputCollection.size());
@@ -51,16 +42,11 @@ public class CollectionUtils {
 		return answer;
 	}
 
-	/** 
-	 * Selects all elements from input collection which match the given predicate
-	 * and adds them to outputCollection.
-	 * <p>
-	 * If the input collection or predicate is null, there is no change to the 
-	 * output collection.
-	 * 
-	 * @param inputCollection  the collection to get the input from, may be null
-	 * @param predicate  the predicate to use, may be null
-	 * @param outputCollection  the collection to output into, may not be null
+	/**
+	 * 筛选元素
+	 * @param inputCollection
+	 * @param predicate
+	 * @param outputCollection
 	 */
 	public static void select(Collection inputCollection, Predicate predicate, Collection outputCollection) {
 		if (inputCollection != null && predicate != null) {
@@ -73,6 +59,11 @@ public class CollectionUtils {
 		}
 	}
 
+	/**
+	 * 断言接口
+	 * @author yangzhang7
+	 *
+	 */
 	public interface Predicate {
 		boolean evaluate(Object object);
 	}

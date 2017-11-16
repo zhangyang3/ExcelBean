@@ -5,7 +5,7 @@ package com.imzy.excel.exceptions;
  * @author yangzhang7
  *
  */
-public class ValidateExcelException extends RuntimeException {
+public class ValidateExcelException extends ExcelException {
 
 	/**
 	 * 
@@ -16,12 +16,7 @@ public class ValidateExcelException extends RuntimeException {
 		super();
 	}
 
-	public ValidateExcelException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public ValidateExcelException(String message, Throwable cause) {
+	public ValidateExcelException(String message, ExcelException cause) {
 		super(message, cause);
 	}
 

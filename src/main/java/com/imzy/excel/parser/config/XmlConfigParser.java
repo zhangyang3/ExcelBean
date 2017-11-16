@@ -67,7 +67,7 @@ public class XmlConfigParser {
 			ExcelConfigBean excelConfigBean = parseExcelNode(excelElement);
 			ThreadLocalHelper.setCurrentExcelConfigBean(excelConfigBean);
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
 		}
 
 	}
@@ -89,7 +89,7 @@ public class XmlConfigParser {
 			}
 
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
 		}
 
 		return excelConfigBean;
@@ -122,7 +122,7 @@ public class XmlConfigParser {
 						sheetConfigBean.setExistProcessor(
 								(Class<? extends ExistProcessor>) Class.forName(existProcessor.trim()));
 					} catch (ClassNotFoundException e) {
-						e.printStackTrace();
+						throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
 					}
 				} else {
 					throw new XmlConfigExcelException("横表或竖表模式必须配置existProcessor");
@@ -192,7 +192,7 @@ public class XmlConfigParser {
 				cellConfigBeanList.add(cellConfigBean);
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
 		}
 
 		return cellConfigBeanList;
@@ -215,7 +215,7 @@ public class XmlConfigParser {
 				validatorConfigBeanList.add(validatorConfigBean);
 			}
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
 		}
 		return validatorConfigBeanList;
 	}

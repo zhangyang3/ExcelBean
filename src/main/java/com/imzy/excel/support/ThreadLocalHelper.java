@@ -11,13 +11,26 @@ import com.imzy.excel.configbean.ExcelConfigBean;
  *
  */
 public class ThreadLocalHelper {
-
+	/** 当前工作簿名称*/
+	private static ThreadLocal<String> currentWorkbookName = new ThreadLocal<String>();
 	/** 当前工作簿*/
 	private static ThreadLocal<Workbook> currentWorkbook = new ThreadLocal<Workbook>();
 	/** 当前sheet页*/
 	private static ThreadLocal<Sheet> currentSheet = new ThreadLocal<Sheet>();
 	/** 当前excel配置bean*/
 	private static ThreadLocal<ExcelConfigBean> currentExcelConfigBean = new ThreadLocal<ExcelConfigBean>();
+
+	public static void clearCurrentWorkbookName() {
+		currentWorkbookName.remove();
+	}
+
+	public static String getCurrentWorkbookName() {
+		return currentWorkbookName.get();
+	}
+
+	public static void setCurrentWorkbookName(String name) {
+		currentWorkbookName.set(name);
+	}
 
 	public static void clearCurrentExcelConfigBean() {
 		currentExcelConfigBean.remove();

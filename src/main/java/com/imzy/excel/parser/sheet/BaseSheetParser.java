@@ -59,7 +59,10 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				String param = validatorConfigBean.getParam();
 
 				if (!ValidateProcessorFactory.getValidatorProcessor(validatorClass).validate(value, param)) {
-					throw new ValidateExcelException(value + "不通过" + validatorClass);
+					String errorReason = value + "不通过" + validatorClass;
+					throw new ValidateExcelException(errorReason).setValidateErrorBean(
+							String.valueOf(cellConfigBean.getStartX()), String.valueOf(cellConfigBean.getStartY()),
+							errorReason);
 				}
 			}
 		}
@@ -222,7 +225,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				Field cellField = clazz.getDeclaredField(cellConfigBean.getFieldName());
 				BeanUtils.setValue(newInstance, cellField, value);
 			} catch (Exception e) {
-				throw new ExcelException(e.getMessage(), e);
+				throw new ExcelException(e.getMessage()).setCommonErrorBean(e.getMessage());
 			}
 		}
 		return newInstance;

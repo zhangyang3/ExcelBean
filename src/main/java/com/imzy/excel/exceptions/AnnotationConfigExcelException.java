@@ -5,7 +5,7 @@ package com.imzy.excel.exceptions;
  * @author yangzhang7
  *
  */
-public class AnnotationConfigExcelException extends RuntimeException {
+public class AnnotationConfigExcelException extends ExcelException {
 
 	/**
 	 * 
@@ -16,12 +16,7 @@ public class AnnotationConfigExcelException extends RuntimeException {
 		super();
 	}
 
-	public AnnotationConfigExcelException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public AnnotationConfigExcelException(String message, Throwable cause) {
+	public AnnotationConfigExcelException(String message, ExcelException cause) {
 		super(message, cause);
 	}
 

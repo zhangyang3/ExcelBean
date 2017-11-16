@@ -114,7 +114,7 @@ public class MixedSheetParser extends BaseSheetParser {
 				List<Object> list = buildHorizontalBeanList(cellConfigBean, (Class<?>) genericType);
 				BeanUtils.setValue(newInstance, horizontalField, list);
 			} catch (Exception e) {
-				throw new ExcelException(e.getMessage(), e);
+				throw new ExcelException(e.getMessage()).setCommonErrorBean(e.getMessage());
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class MixedSheetParser extends BaseSheetParser {
 				List<Object> list = buildVerticalBeanList(cellConfigBean, (Class<?>) genericType);
 				BeanUtils.setValue(newInstance, verticalField, list);
 			} catch (Exception e) {
-				throw new ExcelException(e.getMessage(), e);
+				throw new ExcelException(e.getMessage()).setCommonErrorBean(e.getMessage());
 			}
 		}
 	}

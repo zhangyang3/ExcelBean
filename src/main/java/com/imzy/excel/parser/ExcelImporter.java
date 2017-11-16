@@ -70,12 +70,12 @@ public class ExcelImporter {
 	 * @param clazz
 	 * @return
 	 */
-	public Object write(String url, Class<?> clazz) {
+	public Object write(String url, Class<?> clazz) throws ExcelException {
 		initConfigBean(null, clazz);
 		return write(new File(url));
 	}
 
-	private Object write(File file) {
+	private Object write(File file) throws ExcelException {
 
 		if (file.isDirectory() || !file.exists()) {
 			throw new ExcelException("excel文件不存在");
@@ -97,15 +97,19 @@ public class ExcelImporter {
 				workbook = new XSSFWorkbook(is);
 			}
 			// 设置当前工作簿
+			ThreadLocalHelper.setCurrentWorkbookName(file.getName());
 			ThreadLocalHelper.setCurrentWorkbook(workbook);
 
 			// 将excel转过bean
 			ExcelParser excelParser = new ExcelParser();
 			result = excelParser.parse();
+		} catch (ExcelException e) {
+			throw e;
 		} catch (Exception e) {
-			throw new ExcelException(e.getMessage(), e);
+			throw new ExcelException(e.getMessage()).setCommonErrorBean(e.getMessage());
 		} finally {
 			// 清理线程变量
+			ThreadLocalHelper.clearCurrentWorkbookName();
 			ThreadLocalHelper.clearCurrentWorkbook();
 			ThreadLocalHelper.clearCurrentSheet();
 			ThreadLocalHelper.clearCurrentExcelConfigBean();
@@ -114,7 +118,7 @@ public class ExcelImporter {
 				try {
 					is.close();
 				} catch (IOException e) {
-					throw new ExcelException(e.getMessage(), e);
+					throw new ExcelException(e.getMessage()).setCommonErrorBean(e.getMessage());
 				}
 			}
 		}

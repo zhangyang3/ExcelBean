@@ -5,7 +5,7 @@ package com.imzy.excel.exceptions;
  * @author yangzhang7
  *
  */
-public class ExitHorizontalExcelException extends RuntimeException {
+public class ExitHorizontalExcelException extends ExcelException {
 
 	/**
 	 * 
@@ -16,12 +16,7 @@ public class ExitHorizontalExcelException extends RuntimeException {
 		super();
 	}
 
-	public ExitHorizontalExcelException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public ExitHorizontalExcelException(String message, Throwable cause) {
+	public ExitHorizontalExcelException(String message, ExcelException cause) {
 		super(message, cause);
 	}
 

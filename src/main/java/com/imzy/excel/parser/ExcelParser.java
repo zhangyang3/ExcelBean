@@ -34,6 +34,9 @@ public class ExcelParser {
 		// 2.设置excelBean的字段值
 		List<SheetConfigBean> sheetConfigBeanList = ConfigBeanHelper.getSheetConfigBeanList();
 		for (SheetConfigBean sheetConfigBean : sheetConfigBeanList) {
+			// 线程设置当前sheet
+			ThreadLocalHelper.setCurrentSheet(workbook.getSheet(sheetConfigBean.getName()));
+
 			SheetType sheetType = sheetConfigBean.getType();
 			try {
 				Field excelFiled = excelClazz.getDeclaredField(sheetConfigBean.getFieldName());
@@ -44,8 +47,6 @@ public class ExcelParser {
 					throw new ExcelException(excelClazz.getName() + "字段" + excelFiled.getName() + "不支持");
 				}
 
-				// 获取具体的sheet页
-				ThreadLocalHelper.setCurrentSheet(workbook.getSheet(sheetConfigBean.getName()));
 				// 获取sheet具体的class
 				Class<?> excelFieldType = excelFiled.getType();
 				// 校验sheet类型
@@ -53,8 +54,10 @@ public class ExcelParser {
 
 				Object value = sheetParser.parse(excelFiled, excelFieldType);
 				BeanUtils.setValue(excelBean, excelFiled, value);
+			} catch (ExcelException e) {
+				throw e;
 			} catch (Exception e) {
-				throw new ExcelException(e.getMessage(), e);
+				throw new ExcelException(e.getMessage()).setCommonErrorBean(e.getMessage());
 			} finally {
 				ThreadLocalHelper.clearCurrentSheet();
 			}

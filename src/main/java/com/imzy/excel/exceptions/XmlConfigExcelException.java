@@ -5,7 +5,7 @@ package com.imzy.excel.exceptions;
  * @author yangzhang7
  *
  */
-public class XmlConfigExcelException extends RuntimeException {
+public class XmlConfigExcelException extends ExcelException {
 
 	/**
 	 * 
@@ -16,12 +16,7 @@ public class XmlConfigExcelException extends RuntimeException {
 		super();
 	}
 
-	public XmlConfigExcelException(String message, Throwable cause, boolean enableSuppression,
-			boolean writableStackTrace) {
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
-
-	public XmlConfigExcelException(String message, Throwable cause) {
+	public XmlConfigExcelException(String message, ExcelException cause) {
 		super(message, cause);
 	}
 

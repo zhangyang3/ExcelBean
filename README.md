@@ -96,13 +96,15 @@ public @interface Validator {
 退出处理器是在横表或竖表的情况下使用，用于识别当前行或列是否结束。<br>
 工具包提供了两种简单的实现：```SimpleHorizontalExistProcessor```简单横表退出处理器，```SimpleVerticalExistProcessor```简单竖表退出处理器。
 ### MappingProcessor映射处理器
-映射处理器用于处理单元格值。<br>
-工具包提供：```SingleStringMappingProcesso```r简单字符串映射器，```AbstractCheckboxMappingProcessor```多选框映射器，```AbstractDropdownMappingProcessor```下拉框映射器，```AbstractRadioboxMappingProcessor```单选框映射器。
+映射处理器用于处理单元格值。工具包提供：<br>
+1. ```SingleStringMappingProcesso```简单字符串映射器
+2. ```AbstractCheckboxMappingProcessor```多选框映射器
+3. ```AbstractDropdownMappingProcessor```下拉框映射器
+4. ```AbstractRadioboxMappingProcessor```单选框映射器
 ### PositionProcessor位置处理器
 待补充
 ### ValidateProcessor校验处理器
-校验处理器用于处理单元格值校验。
-工具包提供：<br>
+校验处理器用于处理单元格值校验。工具包提供：<br>
 1. ```NotBlankValidateProcessor```非空校验器
 2. ```RegularValidateProcessor```正则校验器
 3. ```EmailValidatorProcessor```邮箱校验器
@@ -115,3 +117,5 @@ public @interface Validator {
 待补充
 ## 7.未完成的任务
 1. 暂不支持CellType为MIXED模式。
+## 8.其他
+1. ExcelBean需要IDE支持lombok功能。
