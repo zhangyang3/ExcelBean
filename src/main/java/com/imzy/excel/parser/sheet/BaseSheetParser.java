@@ -276,13 +276,13 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 		for (int i = 0; i < arrayY; i++) {
 			// 如果待筛选区域值为null，则从当前sheet页取
 			if (regionValue == null) {
-				Row row = ThreadLocalHelper.getCurrentSheet().getRow(Character.toLowerCase(startY) - 1 + i);
+				Row row = ThreadLocalHelper.getCurrentSheet().getRow(startY - 1 + i);
 				for (int j = 0; j < arrayX; j++) {
 					org.apache.poi.ss.usermodel.Cell cell = row.getCell(Character.toLowerCase(startX) - 'a' + j);
 					result[i][j] = SheetUtils.getCellValue(cell);
 				}
 			} else {
-				String[] row = regionValue[Character.toLowerCase(startY) - 1 + i];
+				String[] row = regionValue[startY - 1 + i];
 				for (int j = 0; j < arrayX; j++) {
 					result[i][j] = row[Character.toLowerCase(startX) - 'a' + j];
 				}

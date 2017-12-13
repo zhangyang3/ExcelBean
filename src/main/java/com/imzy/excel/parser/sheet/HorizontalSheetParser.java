@@ -39,7 +39,7 @@ public class HorizontalSheetParser extends BaseSheetParser {
 		List list = new ArrayList();
 		org.apache.poi.ss.usermodel.Sheet currentSheet = ThreadLocalHelper.getCurrentSheet();
 		int physicalNumberOfRows = currentSheet.getPhysicalNumberOfRows();
-		for (int y = startLine; y < physicalNumberOfRows; y++) {
+		for (int y = startLine; y <= physicalNumberOfRows; y++) {
 			try {
 				// 添加每行值
 				Object tClazzObject = buildObject(field, (Class) tClazz, y);
