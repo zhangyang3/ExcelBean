@@ -26,6 +26,7 @@ import com.imzy.excel.support.ThreadLocalHelper;
 import com.imzy.excel.util.BeanUtils;
 import com.imzy.excel.util.CollectionUtils;
 import com.imzy.excel.util.SheetUtils;
+import com.imzy.excel.util.StringUtils;
 
 /**
  * 基础sheet解析器
@@ -278,8 +279,12 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			if (regionValue == null) {
 				Row row = ThreadLocalHelper.getCurrentSheet().getRow(startY - 1 + i);
 				for (int j = 0; j < arrayX; j++) {
-					org.apache.poi.ss.usermodel.Cell cell = row.getCell(Character.toLowerCase(startX) - 'a' + j);
-					result[i][j] = SheetUtils.getCellValue(cell);
+					if (row != null) {
+						org.apache.poi.ss.usermodel.Cell cell = row.getCell(Character.toLowerCase(startX) - 'a' + j);
+						result[i][j] = SheetUtils.getCellValue(cell);
+					} else {
+						result[i][j] = StringUtils.EMPTY;
+					}
 				}
 			} else {
 				String[] row = regionValue[startY - 1 + i];
