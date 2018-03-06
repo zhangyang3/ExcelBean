@@ -39,7 +39,7 @@ public class SheetUtils {
 		} else if (split.length == Number.TWO_INT) {
 			char c1 = Character.toLowerCase(split[0]);
 			char c2 = Character.toLowerCase(split[1]);
-			return (c1 - 'a') * 26 + (c2 - 'a');
+			return (c1 - 'a' + 1) * 26 + (c2 - 'a');
 		}
 
 		return 0;
