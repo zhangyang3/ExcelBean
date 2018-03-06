@@ -1,4 +1,4 @@
-package com.imzy.excel.processer.exist;
+package com.imzy.excel.processer.exit;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import com.imzy.excel.util.BeanUtils;
  * @author yangzhang7
  *
  */
-public class ExistProcessorFactory {
+public class ExitProcessorFactory {
 
 	private static Map<Class<?>, ExitProcessor> existProcessorMap = new HashMap<Class<?>, ExitProcessor>();
 

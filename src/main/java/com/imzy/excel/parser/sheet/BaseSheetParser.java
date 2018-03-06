@@ -18,7 +18,7 @@ import com.imzy.excel.parser.sheet.task.CommonTask;
 import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.ValidateProcessor;
-import com.imzy.excel.processer.exist.ExistProcessorFactory;
+import com.imzy.excel.processer.exit.ExitProcessorFactory;
 import com.imzy.excel.processer.mapping.MappingProcessorFactory;
 import com.imzy.excel.processer.position.PositionProcessorFactory;
 import com.imzy.excel.processer.validator.ValidateProcessorFactory;
@@ -41,7 +41,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			Class<? extends ExitProcessor> existProcessorClass, ExcelPoint point, String value,
 			String[][] regionValue) {
 		if (null != existProcessorClass && !ExitProcessor.class.equals(existProcessorClass)) {
-			ExitProcessor existProcessor = ExistProcessorFactory.getExistProcessor(existProcessorClass);
+			ExitProcessor existProcessor = ExitProcessorFactory.getExistProcessor(existProcessorClass);
 			return existProcessor.exist(cellConfigBeanList, cellConfigBean, point, regionValue, value);
 		}
 
