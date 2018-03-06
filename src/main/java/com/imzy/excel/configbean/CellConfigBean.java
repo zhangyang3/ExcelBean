@@ -3,7 +3,7 @@ package com.imzy.excel.configbean;
 import java.util.List;
 
 import com.imzy.excel.enums.CellType;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 
@@ -35,7 +35,7 @@ public class CellConfigBean {
 
 	CellType cellType;
 
-	Class<? extends ExistProcessor> existProcessor;
+	Class<? extends ExitProcessor> existProcessor;
 
 	List<CellConfigBean> cellConfigBeanList;
 

@@ -3,7 +3,7 @@ package com.imzy.excel.processer.exist;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.util.BeanUtils;
 
 /**
@@ -13,15 +13,15 @@ import com.imzy.excel.util.BeanUtils;
  */
 public class ExistProcessorFactory {
 
-	private static Map<Class<?>, ExistProcessor> existProcessorMap = new HashMap<Class<?>, ExistProcessor>();
+	private static Map<Class<?>, ExitProcessor> existProcessorMap = new HashMap<Class<?>, ExitProcessor>();
 
 	/**
 	 * 获取退出处理器
 	 * @param existProcessorClass
 	 * @return
 	 */
-	public static ExistProcessor getExistProcessor(Class<? extends ExistProcessor> existProcessorClass) {
-		ExistProcessor existProcessor = existProcessorMap.get(existProcessorClass);
+	public static ExitProcessor getExistProcessor(Class<? extends ExitProcessor> existProcessorClass) {
+		ExitProcessor existProcessor = existProcessorMap.get(existProcessorClass);
 		if (null == existProcessor) {
 			existProcessor = BeanUtils.getBean(existProcessorClass);
 			existProcessorMap.put(existProcessorClass, existProcessor);

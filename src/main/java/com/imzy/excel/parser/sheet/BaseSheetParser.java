@@ -15,7 +15,7 @@ import com.imzy.excel.exceptions.ExitHorizontalExcelException;
 import com.imzy.excel.exceptions.ValidateExcelException;
 import com.imzy.excel.parser.ExcelImporter;
 import com.imzy.excel.parser.sheet.task.CommonTask;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.ValidateProcessor;
 import com.imzy.excel.processer.exist.ExistProcessorFactory;
@@ -38,10 +38,10 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 
 	@Override
 	public boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
-			Class<? extends ExistProcessor> existProcessorClass, ExcelPoint point, String value,
+			Class<? extends ExitProcessor> existProcessorClass, ExcelPoint point, String value,
 			String[][] regionValue) {
-		if (null != existProcessorClass && !ExistProcessor.class.equals(existProcessorClass)) {
-			ExistProcessor existProcessor = ExistProcessorFactory.getExistProcessor(existProcessorClass);
+		if (null != existProcessorClass && !ExitProcessor.class.equals(existProcessorClass)) {
+			ExitProcessor existProcessor = ExistProcessorFactory.getExistProcessor(existProcessorClass);
 			return existProcessor.exist(cellConfigBeanList, cellConfigBean, point, regionValue, value);
 		}
 
@@ -175,17 +175,17 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	}
 
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Character x) {
+			Class<? extends ExitProcessor> existProcessorClass, Character x) {
 		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, null, x);
 	}
 
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Integer y) {
+			Class<? extends ExitProcessor> existProcessorClass, Integer y) {
 		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, y, null);
 	}
 
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Integer y, Character x) {
+			Class<? extends ExitProcessor> existProcessorClass, Integer y, Character x) {
 		return buildBean(clazz, singleValueCellConfigBeanList, existProcessorClass, y, x, null);
 	}
 
@@ -200,7 +200,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	 * @return bean
 	 */
 	protected <T> T buildBean(Class<T> clazz, List<CellConfigBean> singleValueCellConfigBeanList,
-			Class<? extends ExistProcessor> existProcessorClass, Integer y, Character x, String[][] filterRegionValue) {
+			Class<? extends ExitProcessor> existProcessorClass, Integer y, Character x, String[][] filterRegionValue) {
 
 		// 1.构建空对象
 		T newInstance = BeanUtils.getBean(clazz);

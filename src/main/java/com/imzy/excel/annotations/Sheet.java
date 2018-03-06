@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.imzy.excel.enums.SheetType;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 
 /**
  * sheet注解
@@ -34,5 +34,5 @@ public @interface Sheet {
 	/** 
 	 * 退出处理器
 	 */
-	Class<? extends ExistProcessor> existProcessor() default ExistProcessor.class;
+	Class<? extends ExitProcessor> exitProcessor() default ExitProcessor.class;
 }

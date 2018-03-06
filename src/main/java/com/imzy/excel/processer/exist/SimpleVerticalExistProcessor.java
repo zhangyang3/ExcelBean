@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.parser.sheet.ExcelPoint;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.util.CollectionUtils;
 import com.imzy.excel.util.StringUtils;
 
@@ -13,7 +13,7 @@ import com.imzy.excel.util.StringUtils;
  * @author yangzhang7
  *
  */
-public class SimpleVerticalExistProcessor implements ExistProcessor {
+public class SimpleVerticalExistProcessor implements ExitProcessor {
 
 	/**
 	 * 获取最小行y

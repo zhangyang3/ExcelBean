@@ -10,7 +10,7 @@ import com.imzy.excel.parser.sheet.ExcelPoint;
  * @author yangzhang7
  *
  */
-public interface ExistProcessor {
+public interface ExitProcessor {
 
 	/**
 	 * 退出

@@ -72,7 +72,7 @@ public class AnnotationConfigParser {
 		sheetConfigBean.setStartLine(sheetAnnotation.startLine());
 		sheetConfigBean.setStartColumn(sheetAnnotation.startColumn());
 		sheetConfigBean.setType(sheetAnnotation.type());
-		sheetConfigBean.setExistProcessor(sheetAnnotation.existProcessor());
+		sheetConfigBean.setExistProcessor(sheetAnnotation.exitProcessor());
 
 		List<CellConfigBean> cellConfigBeanList = new ArrayList<CellConfigBean>();
 		Class<?> type = sheetfield.getType();

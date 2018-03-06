@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.parser.sheet.ExcelPoint;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.util.CollectionUtils;
 import com.imzy.excel.util.StringUtils;
 
@@ -13,14 +13,14 @@ import com.imzy.excel.util.StringUtils;
  * @author yangzhang7
  *
  */
-public class SimpleHorizontalExistProcessor implements ExistProcessor {
+public class SimpleHorizontalExistProcessor implements ExitProcessor {
 
 	/**
-	 * 获取最小列x
+	 * 获取退出列x
 	 * @param cellConfigBeanList
 	 * @return
 	 */
-	private Character getMinX(List<CellConfigBean> cellConfigBeanList) {
+	protected Character getExistX(List<CellConfigBean> cellConfigBeanList) {
 		Character minX = 'a';
 
 		if (CollectionUtils.isNotEmpty(cellConfigBeanList)) {
@@ -38,7 +38,7 @@ public class SimpleHorizontalExistProcessor implements ExistProcessor {
 	@Override
 	public boolean exist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean, ExcelPoint point,
 			String[][] regionValue, String value) {
-		Character minX = getMinX(cellConfigBeanList);
+		Character minX = getExistX(cellConfigBeanList);
 
 		// 如果最小列没有数据，则认为行扫描结束
 		return Character.toLowerCase(point.getStartX()) == minX && StringUtils.isBlank(value);

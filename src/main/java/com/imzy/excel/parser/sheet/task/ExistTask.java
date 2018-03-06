@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.parser.sheet.ExcelPoint;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 
 /**
  * 退出任务
@@ -24,6 +24,6 @@ public interface ExistTask {
 	 * @return 
 	 */
 	boolean doExist(List<CellConfigBean> cellConfigBeanList, CellConfigBean cellConfigBean,
-			Class<? extends ExistProcessor> existProcessorClass, ExcelPoint point, String value, String[][] regionValue);
+			Class<? extends ExitProcessor> existProcessorClass, ExcelPoint point, String value, String[][] regionValue);
 
 }

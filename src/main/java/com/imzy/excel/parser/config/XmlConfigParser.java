@@ -16,7 +16,7 @@ import com.imzy.excel.configbean.ValidatorConfigBean;
 import com.imzy.excel.enums.CellType;
 import com.imzy.excel.enums.SheetType;
 import com.imzy.excel.exceptions.XmlConfigExcelException;
-import com.imzy.excel.processer.ExistProcessor;
+import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.ValidateProcessor;
@@ -120,7 +120,7 @@ public class XmlConfigParser {
 				if (StringUtils.isNotBlank(existProcessor)) {
 					try {
 						sheetConfigBean.setExistProcessor(
-								(Class<? extends ExistProcessor>) Class.forName(existProcessor.trim()));
+								(Class<? extends ExitProcessor>) Class.forName(existProcessor.trim()));
 					} catch (ClassNotFoundException e) {
 						throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
 					}
@@ -128,7 +128,7 @@ public class XmlConfigParser {
 					throw new XmlConfigExcelException("横表或竖表模式必须配置existProcessor");
 				}
 			} else {
-				sheetConfigBean.setExistProcessor(ExistProcessor.class);
+				sheetConfigBean.setExistProcessor(ExitProcessor.class);
 			}
 			sheetConfigBean.setStartColumn(StringUtils.isNotBlank(startColumn) ? startColumn.trim().charAt(0) : 0);
 			sheetConfigBean.setStartLine(StringUtils.isNotBlank(startLine) ? Integer.parseInt(startLine.trim()) : -1);
@@ -177,8 +177,8 @@ public class XmlConfigParser {
 						? (Class<? extends PositionProcessor>) Class.forName(positionProcessor.trim())
 						: PositionProcessor.class);
 				cellConfigBean.setExistProcessor(StringUtils.isNotBlank(existProcessor)
-						? (Class<? extends ExistProcessor>) Class.forName(existProcessor.trim())
-						: ExistProcessor.class);
+						? (Class<? extends ExitProcessor>) Class.forName(existProcessor.trim())
+						: ExitProcessor.class);
 
 				List<CellConfigBean> innercellConfigBeanList = new ArrayList<CellConfigBean>();
 				if (!CellType.SINGLEVALUE.equals(cellConfigBean.getCellType())) {
