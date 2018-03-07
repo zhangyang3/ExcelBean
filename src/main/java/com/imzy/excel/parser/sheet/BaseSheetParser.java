@@ -49,7 +49,8 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 	}
 
 	@Override
-	public void doValidate(CellConfigBean cellConfigBean, String value) throws ValidateExcelException {
+	public void doValidate(CellConfigBean cellConfigBean, String value, ExcelPoint point)
+			throws ValidateExcelException {
 		List<ValidatorConfigBean> validatorBeanConfigList = cellConfigBean.getValidatorConfigBeanList();
 
 		if (CollectionUtils.isNotEmpty(validatorBeanConfigList)) {
@@ -62,7 +63,8 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				if (!ValidateProcessorFactory.getValidatorProcessor(validatorClass).validate(value, param)) {
 					String errorReason = value + "不通过" + validatorClass;
 					throw new ValidateExcelException(errorReason).setValidateErrorBean(
-							String.valueOf(cellConfigBean.getStartX()), String.valueOf(cellConfigBean.getStartY()),
+							String.valueOf(cellConfigBean.getStartX()), cellConfigBean.getStartY() == -1
+									? String.valueOf(point.getStartY()) : String.valueOf(cellConfigBean.getStartY()),
 							errorReason);
 				}
 			}
@@ -214,13 +216,14 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			// 获取映射值
 			String value = MappingProcessorFactory.buildMappingProcessor(cellConfigBean.getMappingProcessor())
 					.mappingValue(regionValue);
-			// 做校验
-			doValidate(cellConfigBean, value);
+
 			// 做退出
 			if (doExist(singleValueCellConfigBeanList, cellConfigBean, existProcessorClass, point, value,
 					regionValue)) {
 				throw new ExitHorizontalExcelException();
 			}
+			// 做校验
+			doValidate(cellConfigBean, value, point);
 
 			try {
 				Field cellField = clazz.getDeclaredField(cellConfigBean.getFieldName());

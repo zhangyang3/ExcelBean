@@ -23,7 +23,11 @@ public class SheetUtils {
 		Row row = sheet.getRow(Integer.valueOf(y) - 1);
 		Cell cell = row.getCell(getCellNum(x));
 
-		return getCellValue(cell);
+		if (cell == null) {
+			return StringUtils.EMPTY;
+		} else {
+			return getCellValue(cell);
+		}
 	}
 
 	/**
