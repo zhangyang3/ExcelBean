@@ -19,5 +19,5 @@ public @interface Validator {
 	Class<? extends ValidateProcessor> type();
 
 	/** 校验器参数 */
-	String param() default "";
+	String[] param() default "";
 }

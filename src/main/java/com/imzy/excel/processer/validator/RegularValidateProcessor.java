@@ -13,8 +13,8 @@ import com.imzy.excel.processer.ValidateProcessor;
 public class RegularValidateProcessor implements ValidateProcessor {
 
 	@Override
-	public boolean validate(String value, String validatorParam) {
-		Pattern pattern = Pattern.compile(validatorParam);
+	public boolean validate(String value, String[] validatorParam) {
+		Pattern pattern = Pattern.compile(validatorParam[0]);
 		Matcher matcher = pattern.matcher(value);
 
 		return matcher.matches();

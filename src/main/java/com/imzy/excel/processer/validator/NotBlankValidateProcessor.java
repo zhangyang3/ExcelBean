@@ -11,7 +11,7 @@ import com.imzy.excel.util.StringUtils;
 public class NotBlankValidateProcessor implements ValidateProcessor {
 
 	@Override
-	public boolean validate(String value, String validatorParam) {
+	public boolean validate(String value, String[] validatorParam) {
 		return StringUtils.isNotBlank(value);
 	}
 

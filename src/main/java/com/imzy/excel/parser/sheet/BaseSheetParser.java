@@ -57,7 +57,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				// 校验器class类型
 				Class<? extends ValidateProcessor> validatorClass = validatorConfigBean.getType();
 				// 校验器参数
-				String param = validatorConfigBean.getParam();
+				String[] param = validatorConfigBean.getParam();
 
 				if (!ValidateProcessorFactory.getValidatorProcessor(validatorClass).validate(value, param)) {
 					String errorReason = value + "不通过" + validatorClass;

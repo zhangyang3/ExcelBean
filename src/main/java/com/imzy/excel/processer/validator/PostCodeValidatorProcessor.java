@@ -8,7 +8,7 @@ package com.imzy.excel.processer.validator;
 public class PostCodeValidatorProcessor extends RegularValidateProcessor {
 
 	@Override
-	public boolean validate(String value, String validatorParam) {
-		return super.validate(value, "^[1-9][0-9]{5}$");
+	public boolean validate(String value, String[] validatorParam) {
+		return super.validate(value, new String[] { "^[1-9][0-9]{5}$" });
 	}
 }

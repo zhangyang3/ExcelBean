@@ -10,21 +10,20 @@ import com.imzy.excel.util.StringUtils;
 public class LengthValidateProcessor extends RegularValidateProcessor {
 
 	@Override
-	public boolean validate(String value, String validatorParam) {
-		String[] split = validatorParam.split("-");
+	public boolean validate(String value, String[] validatorParam) {
 		String regex = StringUtils.EMPTY;
 
-		if (validatorParam.contains("-")) {
-			if (split.length == 1) {
-				regex = "^.{" + split[0] + ",}$";
-			} else {
-				regex = "^.{" + split[0] + "," + split[1] + "}$";
-			}
+		if (validatorParam.length == 1) {
+			regex = "^.{" + validatorParam[0] + "}$";
 		} else {
-			regex = "^.{" + split[0] + "}$";
+			if (StringUtils.isBlank(validatorParam[1])) {
+				regex = "^.{" + validatorParam[0] + ",}$";
+			} else {
+				regex = "^.{" + validatorParam[0] + "," + validatorParam[1] + "}$";
+			}
 		}
 
-		return super.validate(value, regex);
+		return super.validate(value, new String[] { regex });
 	}
 
 }

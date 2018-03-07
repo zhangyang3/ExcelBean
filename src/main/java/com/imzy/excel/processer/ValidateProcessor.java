@@ -13,5 +13,5 @@ public interface ValidateProcessor {
 	 * @param validatorParam 校验器参数
 	 * @return false为不通过，true为通过
 	 */
-	boolean validate(String value, String validatorParam);
+	boolean validate(String value, String[] validatorParam);
 }

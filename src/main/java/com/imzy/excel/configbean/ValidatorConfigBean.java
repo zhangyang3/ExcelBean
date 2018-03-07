@@ -14,5 +14,5 @@ public class ValidatorConfigBean {
 
 	Class<? extends ValidateProcessor> type;
 
-	String param;
+	String[] param;
 }

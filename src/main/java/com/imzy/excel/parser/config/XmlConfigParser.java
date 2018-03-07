@@ -177,8 +177,7 @@ public class XmlConfigParser {
 						? (Class<? extends PositionProcessor>) Class.forName(positionProcessor.trim())
 						: PositionProcessor.class);
 				cellConfigBean.setExistProcessor(StringUtils.isNotBlank(existProcessor)
-						? (Class<? extends ExitProcessor>) Class.forName(existProcessor.trim())
-						: ExitProcessor.class);
+						? (Class<? extends ExitProcessor>) Class.forName(existProcessor.trim()) : ExitProcessor.class);
 
 				List<CellConfigBean> innercellConfigBeanList = new ArrayList<CellConfigBean>();
 				if (!CellType.SINGLEVALUE.equals(cellConfigBean.getCellType())) {
@@ -211,7 +210,7 @@ public class XmlConfigParser {
 				String param = element.attributeValue(Attribute.PARAM);
 				ValidatorConfigBean validatorConfigBean = new ValidatorConfigBean();
 				validatorConfigBean.setType((Class<? extends ValidateProcessor>) Class.forName(type.trim()));
-				validatorConfigBean.setParam(StringUtils.isNotBlank(param) ? param.trim() : StringUtils.EMPTY);
+				validatorConfigBean.setParam(StringUtils.isNotBlank(param) ? param.trim().split(",") : new String[] {});
 				validatorConfigBeanList.add(validatorConfigBean);
 			}
 		} catch (ClassNotFoundException e) {
