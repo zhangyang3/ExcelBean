@@ -7,10 +7,12 @@ import java.util.Collection;
 import java.util.List;
 
 import com.imzy.excel.annotations.Cell;
+import com.imzy.excel.annotations.Convertor;
 import com.imzy.excel.annotations.Excel;
 import com.imzy.excel.annotations.Sheet;
 import com.imzy.excel.annotations.Validator;
 import com.imzy.excel.configbean.CellConfigBean;
+import com.imzy.excel.configbean.ConvertorConfigBean;
 import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
@@ -128,7 +130,24 @@ public class AnnotationConfigParser {
 
 		List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(cellAnnotation.validators());
 		cellConfigBean.setValidatorConfigBeanList(validatorBeanConfigList);
+
+		List<ConvertorConfigBean> convertorBeanConfigList = parseConvertorNode(cellAnnotation.convertors());
+		cellConfigBean.setConvertorConfigBeanList(convertorBeanConfigList);
 		return cellConfigBean;
+	}
+
+	private List<ConvertorConfigBean> parseConvertorNode(Convertor[] convertors) {
+		List<ConvertorConfigBean> convertorConfigBeanList = new ArrayList<ConvertorConfigBean>();
+		if (convertors.length > 0) {
+			for (Convertor convertor : convertors) {
+				ConvertorConfigBean convertorConfigBean = new ConvertorConfigBean();
+				convertorConfigBean.setParam(convertor.param());
+				convertorConfigBean.setType(convertor.type());
+				convertorConfigBeanList.add(convertorConfigBean);
+			}
+		}
+
+		return convertorConfigBeanList;
 	}
 
 	private List<ValidatorConfigBean> parseValidatorNode(Validator[] validators) {

@@ -40,4 +40,6 @@ public class CellConfigBean {
 	List<CellConfigBean> cellConfigBeanList;
 
 	List<ValidatorConfigBean> validatorConfigBeanList;
+
+	List<ConvertorConfigBean> convertorConfigBeanList;
 }

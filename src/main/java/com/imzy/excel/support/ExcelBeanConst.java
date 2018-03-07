@@ -15,6 +15,7 @@ public interface ExcelBeanConst {
 			String SHEET = "sheet";
 			String CELL = "cell";
 			String VALIDATOR = "validator";
+			String CONVERTOR = "convertor";
 		}
 
 		/** 属性*/

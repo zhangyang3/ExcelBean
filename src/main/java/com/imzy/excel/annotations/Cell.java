@@ -37,6 +37,9 @@ public @interface Cell {
 	/** 值校验器*/
 	Validator[] validators() default {};
 
+	/** 转换器*/
+	Convertor[] convertors() default {};
+
 	/** 
 	 * 值映射器<br>
 	 * 默认值：SingleStringMappingProcessor.class {@link com.imzy.excel.processer.mapping.SingleStringMappingProcessor}

@@ -7,6 +7,6 @@ package com.imzy.excel.parser.sheet.task;
  * @author yangzhang7
  *
  */
-public interface CommonTask extends ValidateTask, ExistTask {
+public interface CommonTask extends ValidateTask, ExistTask, ConvertTask {
 
 }

@@ -10,12 +10,14 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.imzy.excel.configbean.CellConfigBean;
+import com.imzy.excel.configbean.ConvertorConfigBean;
 import com.imzy.excel.configbean.ExcelConfigBean;
 import com.imzy.excel.configbean.SheetConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
 import com.imzy.excel.enums.CellType;
 import com.imzy.excel.enums.SheetType;
 import com.imzy.excel.exceptions.XmlConfigExcelException;
+import com.imzy.excel.processer.ConvertProcessor;
 import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.processer.MappingProcessor;
 import com.imzy.excel.processer.PositionProcessor;
@@ -188,6 +190,11 @@ public class XmlConfigParser {
 				List<ValidatorConfigBean> validatorBeanConfigList = parseValidatorNode(
 						element.elements(Node.VALIDATOR));
 				cellConfigBean.setValidatorConfigBeanList(validatorBeanConfigList);
+
+				List<ConvertorConfigBean> convertorBeanConfigList = parseConvertorNode(
+						element.elements(Node.CONVERTOR));
+				cellConfigBean.setConvertorConfigBeanList(convertorBeanConfigList);
+
 				cellConfigBeanList.add(cellConfigBean);
 			}
 		} catch (ClassNotFoundException e) {
@@ -195,6 +202,28 @@ public class XmlConfigParser {
 		}
 
 		return cellConfigBeanList;
+	}
+
+	/**
+	 * 解析convertor节点
+	 * @param validators
+	 * @return
+	 */
+	private List<ConvertorConfigBean> parseConvertorNode(List<Element> converts) {
+		List<ConvertorConfigBean> convertorConfigBeanList = new ArrayList<ConvertorConfigBean>();
+		try {
+			for (Element element : converts) {
+				String type = element.attributeValue(Attribute.TYPE);
+				String param = element.attributeValue(Attribute.PARAM);
+				ConvertorConfigBean convertorConfigBean = new ConvertorConfigBean();
+				convertorConfigBean.setType((Class<? extends ConvertProcessor>) Class.forName(type.trim()));
+				convertorConfigBean.setParam(StringUtils.isNotBlank(param) ? param.trim().split(",") : new String[] {});
+				convertorConfigBeanList.add(convertorConfigBean);
+			}
+		} catch (ClassNotFoundException e) {
+			throw new XmlConfigExcelException(e.getMessage()).setConfigErrorBean(e.getMessage());
+		}
+		return convertorConfigBeanList;
 	}
 
 	/**

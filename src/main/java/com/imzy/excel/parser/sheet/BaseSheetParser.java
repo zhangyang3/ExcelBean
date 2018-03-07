@@ -9,15 +9,19 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.configbean.CellConfigBean;
+import com.imzy.excel.configbean.ConvertorConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
+import com.imzy.excel.exceptions.ConvertExcelException;
 import com.imzy.excel.exceptions.ExcelException;
 import com.imzy.excel.exceptions.ExitHorizontalExcelException;
 import com.imzy.excel.exceptions.ValidateExcelException;
 import com.imzy.excel.parser.ExcelImporter;
 import com.imzy.excel.parser.sheet.task.CommonTask;
+import com.imzy.excel.processer.ConvertProcessor;
 import com.imzy.excel.processer.ExitProcessor;
 import com.imzy.excel.processer.PositionProcessor;
 import com.imzy.excel.processer.ValidateProcessor;
+import com.imzy.excel.processer.convertor.ConvertProcessorFactory;
 import com.imzy.excel.processer.exit.ExitProcessorFactory;
 import com.imzy.excel.processer.mapping.MappingProcessorFactory;
 import com.imzy.excel.processer.position.PositionProcessorFactory;
@@ -69,6 +73,26 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				}
 			}
 		}
+	}
+
+	@Override
+	public String doConvert(CellConfigBean cellConfigBean, String value, ExcelPoint point)
+			throws ConvertExcelException {
+		String newValue = value;
+		List<ConvertorConfigBean> convertorBeanConfigList = cellConfigBean.getConvertorConfigBeanList();
+
+		if (CollectionUtils.isNotEmpty(convertorBeanConfigList)) {
+			for (ConvertorConfigBean convertorConfigBean : convertorBeanConfigList) {
+				// 转换器class类型
+				Class<? extends ConvertProcessor> convertorClass = convertorConfigBean.getType();
+				// 转换器参数
+				String[] param = convertorConfigBean.getParam();
+
+				newValue = ConvertProcessorFactory.getConvertorProcessor(convertorClass).convert(value, param);
+			}
+		}
+
+		return newValue;
 	}
 
 	/**
@@ -224,6 +248,8 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 			}
 			// 做校验
 			doValidate(cellConfigBean, value, point);
+			// 做转化
+			value = doConvert(cellConfigBean, value, point);
 
 			try {
 				Field cellField = clazz.getDeclaredField(cellConfigBean.getFieldName());
