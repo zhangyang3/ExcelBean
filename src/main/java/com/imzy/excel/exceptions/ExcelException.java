@@ -1,5 +1,6 @@
 package com.imzy.excel.exceptions;
 
+import com.alibaba.fastjson.JSONObject;
 import com.imzy.excel.enums.ErrorType;
 import com.imzy.excel.error.ErrorBean;
 import com.imzy.excel.support.ThreadLocalHelper;
@@ -80,6 +81,11 @@ public class ExcelException extends RuntimeException {
 
 	public ExcelException(Throwable cause) {
 		super(cause);
+	}
+
+	@Override
+	public String toString() {
+		return JSONObject.toJSONString(errorBean);
 	}
 
 }
