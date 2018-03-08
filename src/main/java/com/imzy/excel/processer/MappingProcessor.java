@@ -13,4 +13,5 @@ public interface MappingProcessor {
 	 * @return
 	 */
 	String mappingValue(String[][] regionValue);
+
 }
