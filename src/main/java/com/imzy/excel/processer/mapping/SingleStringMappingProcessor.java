@@ -15,7 +15,7 @@ public class SingleStringMappingProcessor implements MappingProcessor {
 		for (String[] strings : regionValue) {
 			for (String string : strings) {
 				if (StringUtils.isNotBlank(string)) {
-					return string;
+					return string.trim();
 				}
 			}
 		}
