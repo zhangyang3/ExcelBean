@@ -1,5 +1,7 @@
 package com.imzy.excel.util;
 
+import java.text.DecimalFormat;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -59,7 +61,9 @@ public class SheetUtils {
 		int cellType = cell.getCellType();
 		switch (cellType) {
 		case Cell.CELL_TYPE_NUMERIC:
-			cellValue = String.valueOf(cell.getNumericCellValue());
+			DecimalFormat df = new DecimalFormat("0");
+			cellValue = df.format(cell.getNumericCellValue());
+			// cellValue = String.valueOf(cell.getNumericCellValue());
 			break;
 		case Cell.CELL_TYPE_STRING:
 			cellValue = cell.getStringCellValue();
