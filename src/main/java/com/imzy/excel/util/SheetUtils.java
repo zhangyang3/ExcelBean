@@ -63,7 +63,7 @@ public class SheetUtils {
 			int cellType = cell.getCellType();
 			switch (cellType) {
 			case Cell.CELL_TYPE_NUMERIC:
-				DecimalFormat df = new DecimalFormat("0");
+				DecimalFormat df = new DecimalFormat("0.#########");
 				cellValue = df.format(cell.getNumericCellValue());
 				// cellValue = String.valueOf(cell.getNumericCellValue());
 				break;
