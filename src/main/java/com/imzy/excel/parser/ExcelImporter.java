@@ -70,9 +70,10 @@ public class ExcelImporter {
 	 * @param clazz
 	 * @return
 	 */
-	public Object write(String url, Class<?> clazz) throws ExcelException {
+	@SuppressWarnings("unchecked")
+	public <T> T write(String url, Class<T> clazz) throws ExcelException {
 		initConfigBean(null, clazz);
-		return write(new File(url));
+		return (T) write(new File(url));
 	}
 
 	private Object write(File file) throws ExcelException {
