@@ -58,23 +58,26 @@ public class SheetUtils {
 	 */
 	public static String getCellValue(Cell cell) {
 		String cellValue = StringUtils.EMPTY;
-		int cellType = cell.getCellType();
-		switch (cellType) {
-		case Cell.CELL_TYPE_NUMERIC:
-			DecimalFormat df = new DecimalFormat("0");
-			cellValue = df.format(cell.getNumericCellValue());
-			// cellValue = String.valueOf(cell.getNumericCellValue());
-			break;
-		case Cell.CELL_TYPE_STRING:
-			cellValue = cell.getStringCellValue();
-			break;
-		case Cell.CELL_TYPE_BOOLEAN:
-			cellValue = String.valueOf(cell.getBooleanCellValue());
-			break;
-		case Cell.CELL_TYPE_BLANK:
-			cellValue = StringUtils.EMPTY;
-			break;
-		default:
+
+		if (cell != null) {
+			int cellType = cell.getCellType();
+			switch (cellType) {
+			case Cell.CELL_TYPE_NUMERIC:
+				DecimalFormat df = new DecimalFormat("0");
+				cellValue = df.format(cell.getNumericCellValue());
+				// cellValue = String.valueOf(cell.getNumericCellValue());
+				break;
+			case Cell.CELL_TYPE_STRING:
+				cellValue = cell.getStringCellValue();
+				break;
+			case Cell.CELL_TYPE_BOOLEAN:
+				cellValue = String.valueOf(cell.getBooleanCellValue());
+				break;
+			case Cell.CELL_TYPE_BLANK:
+				cellValue = StringUtils.EMPTY;
+				break;
+			default:
+			}
 		}
 		return cellValue;
 	}
