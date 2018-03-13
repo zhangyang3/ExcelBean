@@ -1,10 +1,13 @@
 package com.imzy.excel.processer.validator;
 
+import com.imzy.excel.annotations.ProcessorDescription;
+
 /**
  * 身份证校验器
  * @author yangzhang7
  *
  */
+@ProcessorDescription(description = "身份证校验器")
 public class IdCardValidatorProcessor extends RegularValidateProcessor {
 
 	@Override

@@ -1,5 +1,6 @@
 package com.imzy.excel.processer.validator;
 
+import com.imzy.excel.annotations.ProcessorDescription;
 import com.imzy.excel.processer.ValidateProcessor;
 import com.imzy.excel.util.StringUtils;
 
@@ -8,6 +9,7 @@ import com.imzy.excel.util.StringUtils;
  * @author yangzhang7
  *
  */
+@ProcessorDescription(description = "非空校验器")
 public class NotBlankValidateProcessor implements ValidateProcessor {
 
 	@Override

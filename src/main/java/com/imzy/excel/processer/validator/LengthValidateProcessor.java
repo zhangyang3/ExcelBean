@@ -1,5 +1,6 @@
 package com.imzy.excel.processer.validator;
 
+import com.imzy.excel.annotations.ProcessorDescription;
 import com.imzy.excel.util.StringUtils;
 
 /**
@@ -7,6 +8,7 @@ import com.imzy.excel.util.StringUtils;
  * @author yangzhang7
  *
  */
+@ProcessorDescription(description = "长度校验器")
 public class LengthValidateProcessor extends RegularValidateProcessor {
 
 	@Override

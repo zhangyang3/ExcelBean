@@ -1,10 +1,13 @@
 package com.imzy.excel.processer.validator;
 
+import com.imzy.excel.annotations.ProcessorDescription;
+
 /**
  * 邮箱校验器
  * @author yangzhang7
  *
  */
+@ProcessorDescription(description = "邮箱校验器")
 public class EmailValidatorProcessor extends RegularValidateProcessor {
 
 	@Override

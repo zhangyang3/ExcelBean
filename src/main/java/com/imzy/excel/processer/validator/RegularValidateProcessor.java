@@ -3,6 +3,7 @@ package com.imzy.excel.processer.validator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.imzy.excel.annotations.ProcessorDescription;
 import com.imzy.excel.processer.ValidateProcessor;
 
 /**
@@ -10,6 +11,7 @@ import com.imzy.excel.processer.ValidateProcessor;
  * @author yangzhang7
  *
  */
+@ProcessorDescription(description = "正则校验器")
 public class RegularValidateProcessor implements ValidateProcessor {
 
 	@Override

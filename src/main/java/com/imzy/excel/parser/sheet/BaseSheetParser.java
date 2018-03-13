@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.imzy.excel.annotations.ProcessorDescription;
 import com.imzy.excel.configbean.CellConfigBean;
 import com.imzy.excel.configbean.ConvertorConfigBean;
 import com.imzy.excel.configbean.ValidatorConfigBean;
@@ -65,7 +66,16 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				String[] param = validatorConfigBean.getParam();
 
 				if (!ValidateProcessorFactory.getValidatorProcessor(validatorClass).validate(value, param)) {
-					String errorReason = value + "不通过" + validatorClass;
+					ProcessorDescription processorDescriptionAnnotation = validatorClass
+							.getAnnotation(ProcessorDescription.class);
+					String reason = null;
+					if (processorDescriptionAnnotation == null
+							|| StringUtils.isBlank(processorDescriptionAnnotation.description())) {
+						reason = validatorClass.toString();
+					} else {
+						reason = processorDescriptionAnnotation.description();
+					}
+					String errorReason = "值为：" + value + "，不通过【" + reason + "】";
 					throw new ValidateExcelException(errorReason).setValidateErrorBean(
 							String.valueOf(cellConfigBean.getStartX()), cellConfigBean.getStartY() == -1
 									? String.valueOf(point.getStartY()) : String.valueOf(cellConfigBean.getStartY()),
