@@ -75,7 +75,7 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 					} else {
 						reason = processorDescriptionAnnotation.description();
 					}
-					String errorReason = "值为：" + value + "，不通过【" + reason + "】";
+					String errorReason = "值【" + value + "】不通过【" + reason + "】";
 					throw new ValidateExcelException(errorReason).setValidateErrorBean(
 							String.valueOf(cellConfigBean.getStartX()), cellConfigBean.getStartY() == -1
 									? String.valueOf(point.getStartY()) : String.valueOf(cellConfigBean.getStartY()),
