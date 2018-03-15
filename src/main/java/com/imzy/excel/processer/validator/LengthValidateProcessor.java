@@ -5,9 +5,13 @@ import com.imzy.excel.processer.ValidateProcessor;
 import com.imzy.excel.util.StringUtils;
 
 /**
- * 长度校验器
+ * <b>长度校验器</b><br>
+ * 参数有2个：第一个参数是长度下限，第二个参数是长度上限<br>
+ * {"","100"}：表示字段长度小于等于100<br>
+ * {"100",""}：表示字段长度大于等于100<br>
+ * {"100","200"}：表示字段长度大于等于100，且小于等于200<br>
  * @author yangzhang7
- *
+ * 
  */
 @ProcessorDescription(description = "长度校验器")
 public class LengthValidateProcessor implements ValidateProcessor {
