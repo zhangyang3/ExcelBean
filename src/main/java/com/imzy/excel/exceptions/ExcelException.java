@@ -23,19 +23,21 @@ public class ExcelException extends RuntimeException {
 		this.errorBean = errorBean;
 	}
 
-	public ExcelException setValidateErrorBean(String lineNo, String columnNo, String errorReason) {
-		return setErrorBean(lineNo, columnNo, ErrorType.VALIDATE, errorReason);
+	public ExcelException setValidateErrorBean(String lineNo, String columnNo, String errorReason, String value,
+			String validateErrorReason) {
+		return setErrorBean(lineNo, columnNo, ErrorType.VALIDATE, errorReason, value, validateErrorReason);
 	}
 
 	public ExcelException setConfigErrorBean(String errorReason) {
-		return setErrorBean(null, null, ErrorType.CONFIG, errorReason);
+		return setErrorBean(null, null, ErrorType.CONFIG, errorReason, null, null);
 	}
 
 	public ExcelException setCommonErrorBean(String errorReason) {
-		return setErrorBean(null, null, ErrorType.COMMON, errorReason);
+		return setErrorBean(null, null, ErrorType.COMMON, errorReason, null, null);
 	}
 
-	public ExcelException setErrorBean(String lineNo, String columnNo, ErrorType errorType, String errorReason) {
+	public ExcelException setErrorBean(String lineNo, String columnNo, ErrorType errorType, String errorReason,
+			String value, String validateErrorReason) {
 		String excelName = StringUtils.EMPTY;
 		if (StringUtils.isNotBlank(ThreadLocalHelper.getCurrentWorkbookName())) {
 			excelName = ThreadLocalHelper.getCurrentWorkbookName();
@@ -45,11 +47,11 @@ public class ExcelException extends RuntimeException {
 				&& StringUtils.isNotBlank(ThreadLocalHelper.getCurrentSheet().getSheetName())) {
 			sheetName = ThreadLocalHelper.getCurrentSheet().getSheetName();
 		}
-		return setErrorBean(excelName, sheetName, lineNo, columnNo, errorType, errorReason);
+		return setErrorBean(excelName, sheetName, lineNo, columnNo, errorType, errorReason, value, validateErrorReason);
 	}
 
 	public ExcelException setErrorBean(String excelName, String sheetName, String lineNo, String columnNo,
-			ErrorType errorType, String errorReason) {
+			ErrorType errorType, String errorReason, String value, String validateErrorReason) {
 		ErrorBean errorBean = new ErrorBean();
 		errorBean.setExcelName(excelName);
 		errorBean.setSheetName(sheetName);
@@ -57,6 +59,8 @@ public class ExcelException extends RuntimeException {
 		errorBean.setColumnNo(columnNo);
 		errorBean.setErrorType(errorType);
 		errorBean.setErrorReason(errorReason);
+		errorBean.setValue(value);
+		errorBean.setValidateErrorReason(validateErrorReason);
 		this.errorBean = errorBean;
 		return this;
 	}

@@ -24,4 +24,8 @@ public class ErrorBean {
 	private ErrorType errorType;
 	/** 错误原因*/
 	private String errorReason;
+	/** 错误值*/
+	private String value;
+	/** 校验错误原因*/
+	private String validateErrorReason;
 }

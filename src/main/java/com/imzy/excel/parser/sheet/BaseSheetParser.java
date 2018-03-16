@@ -68,18 +68,18 @@ public abstract class BaseSheetParser implements SheetParser, CommonTask {
 				if (!ValidateProcessorFactory.getValidatorProcessor(validatorClass).validate(value, param)) {
 					ProcessorDescription processorDescriptionAnnotation = validatorClass
 							.getAnnotation(ProcessorDescription.class);
-					String reason = null;
+					String validateErrorReason = null;
 					if (processorDescriptionAnnotation == null
 							|| StringUtils.isBlank(processorDescriptionAnnotation.description())) {
-						reason = validatorClass.toString();
+						validateErrorReason = validatorClass.toString();
 					} else {
-						reason = processorDescriptionAnnotation.description();
+						validateErrorReason = processorDescriptionAnnotation.description();
 					}
-					String errorReason = "值【" + value + "】不通过【" + reason + "】";
+					String errorReason = "值【" + value + "】不通过【" + validateErrorReason + "】";
 					throw new ValidateExcelException(errorReason).setValidateErrorBean(
 							String.valueOf(cellConfigBean.getStartX()), cellConfigBean.getStartY() == -1
 									? String.valueOf(point.getStartY()) : String.valueOf(cellConfigBean.getStartY()),
-							errorReason);
+							errorReason, value, validateErrorReason);
 				}
 			}
 		}
